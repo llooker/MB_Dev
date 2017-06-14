@@ -75,4 +75,12 @@ view: users {
     type: count
     drill_fields: [id, first_name, last_name, orders.count]
   }
+
+  # example or Tier dim
+#   dimension: age_tier {
+#     type: tier
+#     tiers: [15, 25, 35, 45, 55, 65]
+#     sql: ${age} ;;
+#     style: integer
+#   }
 }

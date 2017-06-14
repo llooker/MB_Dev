@@ -40,6 +40,63 @@ view: order_items {
 
   measure: count {
     type: count
-    drill_fields: [id, orders.id, inventory_items.id]
+   # drill_fields: [id, orders.id, products.item_name, sale_price, inventory_items.cost]
+  }
+
+
+
+# example of referenced field
+#   dimension:  sales_margin {
+#     type: number
+#      sql: ${sale_price} - ${inventory_items.cost} ;;
+#   }
+
+# example of yesno field
+#   dimension: returned_item  {
+#     type: yesno
+#     sql: ${returned_date} IS NOT NULL ;;
+#   }
+
+# example showing using yes no field
+#   measure: count_of_returned_items {
+#     type: count
+#     filters: {
+#       field: returned_item
+#       value: "yes"
+#     }
+#   }
+
+#   dimension: adjusted_revenue {
+#     description: "Revenue for completed orders and non-returned items"
+#     type: number
+#     value_format_name: decimal_2
+#     sql: CASE
+#         WHEN  ${orders.status} = 'complete' AND ${returned_date} IS NULL THEN  ${sale_price}
+#         ELSE 0
+#   END ;;
+#   }
+#
+#   measure: total_adjusted_revenue {
+#     type: sum
+#     value_format_name: usd
+#     sql: ${adjusted_revenue} ;;
+#   }
+#
+#   measure:  total_inventory_cost {
+#     type:  sum
+#     value_format_name: decimal_2
+#     sql: ${inventory_items.cost} ;;
+#   }
+#
+#   measure: total_adjusted_margin {
+#     type: number
+#     value_format_name: usd
+#     description: "Adjusted sales minus inventory cost"
+#     sql: ${total_adjusted_revenue} - ${total_inventory_cost} ;;
+#     drill_fields: [margin_detail*]
+#   }
+#
+  set: margin_detail {
+    fields: [products.brand, products.category, products.item_name, order_items.count]
   }
 }
