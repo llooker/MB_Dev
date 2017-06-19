@@ -84,3 +84,25 @@ view: users {
 #     style: integer
 #   }
 }
+
+view: users_ext {
+  extends: [users]
+  view_label: "Users"
+#   sql_table_name: public.users ;;
+
+  dimension: id {
+    primary_key: yes
+    type: number
+    sql: ${TABLE}.id ;;
+  }
+
+  dimension: full_name {
+    type: string
+    sql: CONCAT(${TABLE}.first_name}, " ", ${TABLE}.last_name}} ;;
+  }
+
+  measure:  count {
+    type: count
+
+  }
+}

@@ -15,6 +15,13 @@ explore: inventory_items {
 }
 
 explore: order_items {
+  always_filter: {
+    filters: {
+        field: orders.created_date
+        value: "2017-01-01"
+      }
+    }
+
   join: orders {
     type: left_outer
     sql_on: ${order_items.order_id} = ${orders.id} ;;
@@ -59,3 +66,21 @@ explore: product_facts {
 explore: products {}
 
 explore: users {}
+
+
+explore:  orders_users_ext {
+  from: orders
+  view_name: orders
+  view_label: "orders_ext"
+  extends: [orders]
+  hidden: no
+
+#   sql_always_where: ${users.created_date} > "2016-01-01" ;;
+  join: users_ext {
+#       sql_table_name: public.users ;;
+      type: left_outer
+      relationship: many_to_one
+      sql_on: ${users_ext.id} = ${orders.user_id} ;;
+      fields: [users_ext.full_name, users_ext.count]
+  }
+}
