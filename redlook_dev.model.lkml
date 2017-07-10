@@ -35,6 +35,7 @@ explore: order_items {
   }
 
   join: users {
+    from: users
     type: left_outer
     sql_on: ${orders.user_id} = ${users.id} ;;
     relationship: many_to_one
@@ -65,7 +66,8 @@ explore: product_facts {
 
 explore: products {}
 
-explore: users {}
+explore: users {
+}
 
 
 explore:  orders_users_ext {
@@ -76,11 +78,12 @@ explore:  orders_users_ext {
   hidden: no
 
 #   sql_always_where: ${users.created_date} > "2016-01-01" ;;
-  join: users_ext {
+  join: users {
 #       sql_table_name: public.users ;;
+      from: users_ext
       type: left_outer
       relationship: many_to_one
-      sql_on: ${users_ext.id} = ${orders.user_id} ;;
-      fields: [users_ext.full_name, users_ext.count]
+      sql_on: ${users.id} = ${orders.user_id} ;;
+      #fields: [detail_fields*]
   }
 }

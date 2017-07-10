@@ -21,6 +21,16 @@ view: orders {
     sql: ${TABLE}.created_at ;;
   }
 
+  dimension_group: extracted_created {
+    type: time
+    timeframes: [ day_of_month, hour_of_day, minute, second]
+    sql:   ${TABLE}.created_at;;
+  }
+
+  dimension: date_diff_1 {
+      type: date_time
+      sql: DATEDIFF(${TABLE}.created_at, current_date);;
+  }
 
   dimension: status {
     type: string
