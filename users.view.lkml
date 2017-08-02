@@ -1,6 +1,6 @@
 view: users {
-#   sql_table_name: public.users ;;
-  sql_table_name: {{ _user_attributes["schema_name"] }}.users ;;
+  sql_table_name: public.users ;;
+#   sql_table_name: {{ _user_attributes["schema_name"] }}.users ;;
 
 
   dimension: id {
@@ -12,6 +12,18 @@ view: users {
   dimension: age {
     type: number
     sql: ${TABLE}.age ;;
+  }
+
+  dimension: is_senior {
+    type: yesno
+    sql: ${age} > 60 ;;
+  }
+
+  dimension: age_tier {
+    type: tier
+    tiers: [15, 25, 35, 45, 60]
+    sql: ${age}  ;;
+    style: interval
   }
 
   dimension: city {
@@ -73,9 +85,23 @@ view: users {
     sql: ${TABLE}.zip ;;
   }
 
+  dimension: random_gen {
+    type: number
+    sql: random()  ;;
+  }
+
   measure: count {
     type: count
     drill_fields: [id, first_name, last_name, orders.count]
+  }
+
+
+  measure: senior_count {
+      type: count
+      filters: {
+          field: is_senior
+          value: "yes"
+      }
   }
 
   # example or Tier dim

@@ -18,7 +18,7 @@ explore: order_items {
   always_filter: {
     filters: {
         field: orders.created_date
-        value: "2017-01-01"
+        value: "7 days ago for 7 days"
       }
     }
 

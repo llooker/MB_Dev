@@ -27,10 +27,10 @@ view: orders {
     sql:   ${TABLE}.created_at;;
   }
 
-  dimension: date_diff_1 {
-      type: date_time
-      sql: DATEDIFF(${TABLE}.created_at, current_date);;
-  }
+#   dimension: date_diff_1 {
+#       type: date_time
+#       sql: DATEDIFF(${TABLE}.created_at, current_date);;
+#   }
 
   dimension: status {
     type: string
@@ -47,6 +47,17 @@ view: orders {
     # hidden: yes
     sql: ${TABLE}.user_id ;;
   }
+
+dimension: order_date_diff {
+  type: string
+  sql:
+ CONCAT(
+   IF(FLOOR(HOUR(TIMEDIFF(NOW(), ${created_date})) / 24) = 0, '', CONCAT(FLOOR(HOUR(TIMEDIFF(NOW(), ${created_date})) / 24), ' days, ')),
+   IF(MOD(HOUR(TIMEDIFF(NOW(), ${created_date})), 24) = 0, '', CONCAT(MOD(HOUR(TIMEDIFF(NOW(), ${created_date})), 24), ' hours, ')),
+   IF(MINUTE(TIMEDIFF(NOW(), ${created_date})) = 0, '', CONCAT(MINUTE(TIMEDIFF(NOW(), ${created_date})), ' minutes, ')),
+   SECOND(TIMEDIFF(NOW(), ${created_date})), ' seconds')
+;;
+}
 
   measure: count {
     type: count

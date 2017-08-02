@@ -1,6 +1,6 @@
 view: order_items_1 {
   derived_table: {
-    sql: SELECT * FROM public.order_items LIMIT 10
+    sql: SELECT * FROM public.order_items
       ;;
   }
 
