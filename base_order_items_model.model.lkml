@@ -6,7 +6,7 @@ include: "*.dashboard.lookml"  # include all dashboards in this project
 
 explore: base_order_items_model {
   view_name: base_order_items # base_outreaches
-
+#   from: base_order_items
 #   join: base_mailings
   join: base_orders {
     from: base_orders # actual view name

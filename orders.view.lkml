@@ -1,6 +1,11 @@
 view: orders {
   sql_table_name: public.orders ;;
 
+  filter: testfilter {
+      type:  date
+      sql:  > '2017-01-01' ;;
+  }
+
   dimension: id {
     primary_key: yes
     type: number
@@ -18,7 +23,7 @@ view: orders {
       quarter,
       year
     ]
-    sql: ${TABLE}.created_at ;;
+    sql: {% condition testfilter %} ${TABLE}.created_at {% endcondition %};;
   }
 
   dimension_group: extracted_created {
