@@ -29,7 +29,8 @@ view: pdt_example {
       GROUP BY 1,2
       ORDER BY DATE(orders.created_at )
  ;;
-  persist_for: "1 hour"
+  persist_for: "10 minutes"
+  indexes: ["user_id"]
   }
 
   measure: count {

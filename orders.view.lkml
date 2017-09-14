@@ -37,6 +37,21 @@ view: orders {
     sql: ${TABLE}.created_at;;
   }
 
+  dimension_group: order_end {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year,
+      month_num
+    ]
+    sql: DATE_ADD(${TABLE}.created_at, INTERVAL 2 DAY);;
+  }
+
   dimension: create_start_date {
     type: string
     hidden: yes

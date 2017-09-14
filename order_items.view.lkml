@@ -55,6 +55,10 @@ view: order_items {
     sql: ${returned_date} is NOT NULL ;;
   }
 
+dimension: is_customer_order_in_365_days_from_first_order{
+  type: yesno
+  sql:  ${orders.created_date} BETWEEN ${users.customer_first_order_date} AND ${users.customer_first_order_date_plus} ;;
+}
   measure: count {
     type: count
     drill_fields: [detail*]
@@ -74,6 +78,13 @@ view: order_items {
           SUM( CASE WHEN ${products.category} = 'Shorts' THEN 1 ELSE 0 END) ;;
   }
 
+measure: sum_of_orders_in_365{
+  type: sum
+  filters: {
+    field: is_customer_order_in_365_days_from_first_order
+    value: "yes"
+  }
+}
 #   measure:  max_order_date {
 #     type:  max
 #     sql:  ${orders.created_date};;

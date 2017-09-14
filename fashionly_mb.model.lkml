@@ -168,3 +168,5 @@ explore: templated_filter_example {
     sql_on: ${orders.created_date} = ${templated_filter_example.created_date} ;;
   }
 }
+
+explore: pdt_example {}

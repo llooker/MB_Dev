@@ -1,10 +1,25 @@
 view: users {
   sql_table_name: demo_db.users ;;
-  filter: user_city_filter {
+
+  filter: OR_city_filter {
     type: string
-    suggest_explore: users_dup
-    suggest_dimension: users_dup.city
-    }
+    suggest_explore: users
+    suggest_dimension: users.city
+  }
+
+  filter: OR_zip_filter {
+    type: string
+    suggest_explore: users
+    suggest_dimension: users.zip
+  }
+
+
+  dimension: Apply_OR_condition {
+    #  always set to YES
+    type: yesno
+    sql: {% condition OR_city_filter %} ${city} {% endcondition %} OR  {% condition OR_zip_filter %} ${zip} {% endcondition %}  ;;
+
+  }
 
   dimension: id {
     primary_key: yes
@@ -12,29 +27,41 @@ view: users {
     sql: ${TABLE}.id ;;
   }
 
+
+  # dimension: variable_dim {
+  #     type: string
+  #     hidden: yes
+  #     sql: CASE
+  #             WHEN {% parameter user_city_filter %} = "zip" THEN ${zip} IS NOT NULL
+  #             WHEN {% parameter user_city_filter %} = "city" THEN ${city}  IS NOT NULL
+  #             WHEN {% parameter user_city_filter %} = "state" THEN ${state}  IS NOT NULL
+  #         END ;;
+  # }
+
   dimension: age {
     type: number
     sql: ${TABLE}.age ;;
   }
 
-dimension: filter_val {
+  dimension: filter_val {
+    type: string
+    sql: {% parameter OR_city_filter %};;
+  }
 
-  type: string
-  sql: {% parameter user_city_filter %};;
-}
-dimension: age_tier {
 
-  type: tier
-  style: integer
-  tiers: [15,25,35,50,65]
-  sql: ${age} ;;
-}
+  dimension: age_tier {
 
-dimension: new_customer {
-  type: yesno
-  sql:  ${created_date} >= DATE_ADD(CURDATE(), INTERVAL -89 DAY)   ;;
+    type: tier
+    style: integer
+    tiers: [15,25,35,50,65]
+    sql: ${age} ;;
+  }
+
+  dimension: new_customer {
+    type: yesno
+    sql:  ${created_date} >= DATE_ADD(CURDATE(), INTERVAL -89 DAY)   ;;
 #  (((users.created_at ) >= ((DATE_ADD(CURDATE(),INTERVAL -89 day))) AND (users.created_at ) < ((DATE_ADD(DATE_ADD(CURDATE(),INTERVAL -89 day),INTERVAL 90 day)))))
-}
+  }
   dimension: city {
     type: string
     sql: ${TABLE}.city ;;
@@ -47,7 +74,15 @@ dimension: new_customer {
     #map_layer_name: my_neighborhood_layer
   }
 
+  dimension: customer_first_order_date {
+    type:  date
+    sql: (SELECT MIN(o.created_at) FROM demo_db.orders AS o WHERE o.user_id = ${id}) ;;
+  }
 
+  dimension: customer_first_order_date_plus {
+    type: date
+    sql: DATE_ADD(${customer_first_order_date}, INTERVAL 365 DAY) ;;
+  }
 
 
   dimension: country {
@@ -56,8 +91,8 @@ dimension: new_customer {
   }
 
   dimension: days_since_signup {
-      type: number
-      sql: DATEDIFF(CURDATE(), ${created_date} );;
+    type: number
+    sql: DATEDIFF(CURDATE(), ${created_date} );;
   }
 
   dimension: days_since_signup_tier {
@@ -117,10 +152,10 @@ dimension: new_customer {
   }
 
   dimension: is_city_selected {
-      type: yesno
+    type: yesno
 #       sql: ${secondary_city} LIKE CONCAT('%', {% parameter user_city_filter %}, '%');;
 #       sql: POSITION({% parameter user_city_filter %}  IN ${secondary_city} ) > 0 ;;
-    sql: POSITION(${filter_val}  IN ${secondary_city} ) > 0 ;;
+    sql: POSITION(${OR_city_filter}  IN ${secondary_city} ) > 0 ;;
 
   }
 
@@ -136,7 +171,7 @@ dimension: new_customer {
   }
 
   dimension: state_greater_100 {
-      type: string
+    type: string
 
   }
 
@@ -146,21 +181,21 @@ dimension: new_customer {
     sql: ${TABLE}.zip ;;
   }
 
-dimension: customer_order_count {
-  type: number
-  #hidden: yes
-  sql:  (SELECT COUNT(DISTINCT orders.id ) FROM demo_db.order_items  AS order_items
+  dimension: customer_order_count {
+    type: number
+    #hidden: yes
+    sql:  (SELECT COUNT(DISTINCT orders.id ) FROM demo_db.order_items  AS order_items
         LEFT JOIN demo_db.orders  AS orders ON order_items.order_id = orders.id
         WHERE orders.user_id = ${TABLE}.id
         GROUP BY users.id ) ;;
-}
+  }
 
-dimension: customer_order_tier {
-  type: tier
-  tiers: [1,2,3,6,10]
-  style: integer
-  sql: ${customer_order_count} ;;
-}
+  dimension: customer_order_tier {
+    type: tier
+    tiers: [1,2,3,6,10]
+    style: integer
+    sql: ${customer_order_count} ;;
+  }
 
   measure: count {
     label: "Count of users"
@@ -170,22 +205,22 @@ dimension: customer_order_tier {
 
   measure: select_city_count {
 
-      type: count
-      filters: {
-        field:  is_city_selected
-        value: "yes"
-        }
+    type: count
+    filters: {
+      field:  is_city_selected
+      value: "yes"
+    }
 #     sql: ${city}  = ${filter_val}
   }
 
-measure: average_days_since_signup {
-  type: average
-  sql: ${days_since_signup} ;;
-}
-measure:  average_months_since_signup {
-  type: average
-  sql: FLOOR((DATEDIFF(CURDATE(), ${created_date} ))/30) ;;
-}
+  measure: average_days_since_signup {
+    type: average
+    sql: ${days_since_signup} ;;
+  }
+  measure:  average_months_since_signup {
+    type: average
+    sql: FLOOR((DATEDIFF(CURDATE(), ${created_date} ))/30) ;;
+  }
 
   # ----- Sets of fields for drilling ------
   set: detail {
