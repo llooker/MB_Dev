@@ -150,21 +150,20 @@ measure: sum_of_orders_in_365{
       value_format_name: usd
       description: "Adjusted sales minus inventory cost"
       sql: ${total_adjusted_revenue} - ${inventory_items.total_cost} ;;
-#     drill_fields: [margin_detail*]
-      html:
+      drill_fields: [margin_detail*]
+      # html:<a href: "https://localhost:9999/dashboards/10?" </a>  {{value}};;
 
-      label: "Brands Sold"
-      url: "https://localhost:9999/dashboards/10?"
-#       url: "/explore/model/explore_name?fields=view.field_1,view.field_2,&f[view.filter_1]={{ value }}"
-         icon_url: "http://www.looker.com/favicon.ico"
-        ;;
+#       label: "Brands Sold"
+#       url: "https://localhost:9999/dashboards/10?"
+# #       url: "/explore/model/explore_name?fields=view.field_1,view.field_2,&f[view.filter_1]={{ value }}"
+#         icon_url: "http://www.looker.com/favicon.ico"
+#         ;;
 
       }
 
       measure:  average_gross_margin {
         type: average
         value_format_name: usd
-        value_format_name: decimal_2
         sql: ${sale_margin} - ${inventory_items.cost} ;;
 
       }
@@ -195,10 +194,10 @@ measure: sum_of_orders_in_365{
         type: sum
         value_format_name: usd
         sql:${sale_price}  ;;
-        filters: {
-          field: users.new_customer
-          value: "Yes"
-        }
+#         filters: {
+#           field: users.new_customer
+#           value: "Yes"
+#         }
         filters: {
           field: orders.status
           value: "complete"

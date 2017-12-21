@@ -12,6 +12,8 @@ map_layer: my_neighborhood_layer {
   property_key: "neighborhood"
 }
 explore: events {
+  label: "Events Label"
+  group_label: "Events Group"
 conditionally_filter: {}
   join: users {
     type: left_outer
@@ -123,11 +125,15 @@ explore: customers {
 }
 
 explore: orders {
-
+#   access_filter: {
+#     field: users.state
+#     user_attribute: user_state
+#   }
   join: users {
     type: left_outer
     sql_on: ${orders.user_id} = ${users.id} ;;
     relationship: many_to_one
+
   }
   # join: users_dup {
   #   type: left_outer
@@ -136,7 +142,18 @@ explore: orders {
   # }
 }
 
-explore: products {}
+
+
+explore: products {
+  # always_filter: {
+  #     filters: {
+  #       field: products.product_brand_filter
+  #       value: ""
+  #     }
+  # }
+  sql_always_where: {% condition products.brand_filter %} brand {% endcondition %};;
+  # sql_always_where: {% condition product_brand_filter %} products.brand  {% endcondition %} ;;
+}
 
 explore: schema_migrations {}
 
@@ -170,3 +187,15 @@ explore: templated_filter_example {
 }
 
 explore: pdt_example {}
+
+explore: products_ROJ {
+  from: products
+  join: inventory_items {
+    relationship: one_to_many
+    sql: RIGHT JOIN inventory_items ON ${products_ROJ.id} = ${inventory_items.product_id};;
+  }
+  join: customer_counts {
+    relationship: one_to_many
+    sql:  RIGHT JOIN customer_counts ON ${customer_counts.user_id} = ${products_ROJ.id} ;;
+  }
+}

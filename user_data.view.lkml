@@ -1,5 +1,6 @@
 view: user_data {
   sql_table_name: demo_db.user_data ;;
+  view_label: "User Data Label"
 
   dimension: id {
     primary_key: yes

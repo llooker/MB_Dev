@@ -1,6 +1,11 @@
 view: products {
   sql_table_name: demo_db.products ;;
 
+
+  filter: brand_filter {
+    type: string
+  }
+
   dimension: id {
     primary_key: yes
     type: number
@@ -22,13 +27,20 @@ view: products {
     url: "http://www.google.com/search?q=site:facebook.com+{{ value | encode_uri }}+clothes&btnI"
     icon_url: "https://static.xx.fbcdn.net/rsrc.php/yl/r/H3nktOa7ZMg.ico"
   }
+    link: {
+      label: "Products By Brand"
+       url: "/looks/74?&f[products.brand_filter]={{ value | encode_uri }}"
+      # url: "/dashboards/20?Brand%20Filter={{ value | encode_uri }}"
+      # icon_url: "https://static.xx.fbcdn.net/rsrc.php/yl/r/H3nktOa7ZMg.ico"
+    }
   }
 
   dimension: category {
     type: string
     sql:  ${TABLE}.category  ;;
-    html: <a href="http://www.google.com/search?q={{ value }}">{{ {{value }}</a> ;;
+    html: <a href="http://www.google.com/search?q={{ value | encode_uri }}"> {{value }}</a> ;;
     # "http://www.google.com/search?q=" {{link}} ;;
+#     html:  Category Name "{{value}}"  ;;
   }
 
   dimension: department {

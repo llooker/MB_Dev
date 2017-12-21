@@ -13,6 +13,12 @@ view: users {
     suggest_dimension: users.zip
   }
 
+  filter:  search_field {
+  type: string
+  sql: ${id};;
+  suggest_dimension: dummy
+
+  }
 
   dimension: Apply_OR_condition {
     #  always set to YES
@@ -24,10 +30,14 @@ view: users {
   dimension: id {
     primary_key: yes
     type: number
-    sql: ${TABLE}.id ;;
+     sql: ${TABLE}.id ;;
+
   }
 
-
+dimension: dummy {
+  type: string
+  sql: concat (${id}, "|", ${last_name}) ;;
+}
   # dimension: variable_dim {
   #     type: string
   #     hidden: yes
@@ -50,11 +60,28 @@ view: users {
 
 
   dimension: age_tier {
-
     type: tier
     style: integer
     tiers: [15,25,35,50,65]
     sql: ${age} ;;
+    html:
+      {% if  value  == 'Below 15' %}
+         Under 15
+      {% endif %}
+      {% if value == '15 to 24' %}
+        Between 15 To 24
+      {% endif %}
+      {% if value == '25 to 34' %}
+        Between 35 To 34
+      {% endif %}
+    ;;
+
+  }
+
+  dimension: age_display {
+    type: string
+    sql:
+
   }
 
   dimension: new_customer {

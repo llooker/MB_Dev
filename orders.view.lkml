@@ -34,7 +34,24 @@ view: orders {
       year,
       month_num
     ]
-    sql: ${TABLE}.created_at;;
+#     sql: ${TABLE}.created_at = CAST({% parameter test_date_filter %} AS DATE) ;;
+    sql: ${TABLE}.created_at ;;
+  }
+
+  dimension_group: converted_created {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year,
+      month_num
+    ]
+#     sql: ${TABLE}.created_at = CAST({% parameter test_date_filter %} AS DATE) ;;
+    sql: CONVERT_TZ(${TABLE}.created_at, 'UTC', 'EST') ;;
   }
 
   dimension_group: order_end {
@@ -135,4 +152,14 @@ view: orders {
       html: {{ running_total_of_orders._value | divided_by: yearly_orders_target_base._value | times: 100 | round: 2 }}% of Target;;
     }
 
+      dimension: sample_summary{
+        type: string
+        sql: "Order Summary" ;;
+        html: <div><table>
+              <tr><td><font size="5" color="darkred"> Order ID </td><td><font size="5"  >{{ order_id._value }} </tr>
+              <tr><td><font size="5" color="darkred"> Created Date  </tdr><td><font size="5" color="green"> {{ created_date._value }} </tr>
+              <tr><td><font size="5" color="darkred"> Order Status  </td><td> <font size="5" color="blue" >{{ status._value }} </tr>
+              </table></div>
+              ;;
+      }
   }
