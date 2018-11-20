@@ -11,6 +11,19 @@ view: orders {
     sql: ${created_date} > ${testdatefilter_date};;
   }
 
+  parameter: selected_period {
+    type: string
+    allowed_value: {
+      value: "week"
+    }
+    allowed_value: {
+      value: "month"
+    }
+    allowed_value: {
+      value: "quarter"
+    }
+  }
+
   dimension_group: testdatefilter {
     type: time
     timeframes: [raw, date]
@@ -20,6 +33,7 @@ view: orders {
     primary_key: yes
     type: number
     sql: ${TABLE}.id ;;
+    drill_fields: [ users.id, order_items.id,]
   }
 
   dimension_group: created {
@@ -37,6 +51,35 @@ view: orders {
 #     sql: ${TABLE}.created_at = CAST({% parameter test_date_filter %} AS DATE) ;;
     sql: ${TABLE}.created_at ;;
   }
+
+  dimension: order_created_quarter {
+    type: date_quarter
+    sql:   ${TABLE}.created_at ;;
+  }
+  dimension: order_created_week {
+    type: date_week
+    sql:   ${TABLE}.created_at ;;
+    html: {{rendered_value}} ;;
+  }
+  dimension: order_created_month {
+    type: date_month
+    sql:   ${TABLE}.created_at ;;
+    html: {{rendered_value}} ;;
+  }
+
+  dimension: dynamic_display {
+    type: string
+    sql:
+        {% if selected_period._parameter_value == "'week'" %}
+            ${order_created_week}
+        {% elsif selected_period._parameter_value == "'quarter'" %}
+            ${created_quarter}
+        {% else %}
+             ${order_created_quarter}
+        {% endif %}
+        ;;
+  }
+
 
   dimension_group: converted_created {
     type: time

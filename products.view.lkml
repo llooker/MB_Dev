@@ -12,6 +12,17 @@ view: products {
     sql: ${TABLE}.id ;;
   }
 
+  dimension: url_string {
+    type: string
+    sql:  {% if _explore._name == 'order_items' %}
+          "/looks/74?&f[products.brand_filter]={{ brand._value | encode_uri }}"
+          {% else %}
+          ""
+          {% endif %} ;;
+#     sql: "/looks/74?&f[products.brand_filter]={{ brand._value | encode_uri }}" ;;
+  }
+
+
   dimension: brand {
     type: string
     sql: ${TABLE}.brand ;;
@@ -27,10 +38,12 @@ view: products {
     url: "http://www.google.com/search?q=site:facebook.com+{{ value | encode_uri }}+clothes&btnI"
     icon_url: "https://static.xx.fbcdn.net/rsrc.php/yl/r/H3nktOa7ZMg.ico"
   }
+
     link: {
       label: "Products By Brand"
-       url: "/looks/74?&f[products.brand_filter]={{ value | encode_uri }}"
-      # url: "/dashboards/20?Brand%20Filter={{ value | encode_uri }}"
+        url: "{{ url_string._rendered_value }}"
+
+#        url: "/dashboards/20?Brand%20Filter={{ value | encode_uri }}"
       # icon_url: "https://static.xx.fbcdn.net/rsrc.php/yl/r/H3nktOa7ZMg.ico"
     }
   }

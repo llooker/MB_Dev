@@ -36,6 +36,7 @@ view: users {
 
 dimension: dummy {
   type: string
+#   sql: concat (${id}, "|", ${last_name}) ;;
   sql: concat (${id}, "|", ${last_name}) ;;
 }
   # dimension: variable_dim {
@@ -195,6 +196,7 @@ dimension: dummy {
     map_layer_name: us_states
     type: string
     sql: ${TABLE}.state ;;
+
   }
 
   dimension: state_greater_100 {

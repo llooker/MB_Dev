@@ -40,7 +40,7 @@ explore: order_items {
   join: orders {
     type: left_outer
     sql_on: ${order_items.order_id} = ${orders.order_id} ;;
-    relationship: many_to_one
+    relationship: one_to_one
   }
 
   join: products {
@@ -80,7 +80,7 @@ explore: customers {
 
 #   sql_always_where: {% parameter create_date_filter %} > ${orders.created_date} ;;
   view_name: order_items
-
+  # sql_always_where: ${customer_counts.customer_first_order_date} > {% parameter date_filter %};;
   join: inventory_items {
     type: left_outer
     sql_on: ${order_items.inventory_item_id} = ${inventory_items.id} ;;
@@ -125,10 +125,11 @@ explore: customers {
 }
 
 explore: orders {
-#   access_filter: {
-#     field: users.state
-#     user_attribute: user_state
-#   }
+  always_join: [users]
+  sql_always_where: 1=1
+    {% if users.search_field._is_filtered %}
+      and {% condition users.search_field  %} users.id {% endcondition %}
+    {% endif %};;
   join: users {
     type: left_outer
     sql_on: ${orders.user_id} = ${users.id} ;;
@@ -140,6 +141,21 @@ explore: orders {
   #   sql_on: ${users_dup.id} = ${users.id} ;;
   #   relationship: one_to_one
   # }
+}
+
+explore: orders1 {
+  from: orders
+  always_join: [users]
+  sql_always_where: 1=1
+    {% if users.search_field._is_filtered %}
+      and
+        users.id = split_part({% parameter users.search_field  %}, "|", 1)
+    {% endif %};;
+  join: users {
+    type: left_outer
+    sql_on: ${orders1.user_id} = ${users.id} ;;
+    relationship: many_to_one
+  }
 }
 
 
