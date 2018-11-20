@@ -1,5 +1,8 @@
 connection: "thelook"
 
+## Adding test comments
+
+
 # include all the views
 include: "*.view"
 
