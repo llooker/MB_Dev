@@ -17,20 +17,24 @@ view: products {
     sql: ${TABLE}.category ;;
   }
 
+  dimension: cost {
+    type: number
+    sql: ${TABLE}.cost ;;
+  }
 
   dimension: department {
     type: string
     sql: ${TABLE}.department ;;
   }
 
-  dimension: item_name {
-    type: string
-    sql: ${TABLE}.item_name ;;
+  dimension: distribution_center_id {
+    type: number
+    sql: ${TABLE}.distribution_center_id ;;
   }
 
-  dimension: rank {
-    type: number
-    sql: ${TABLE}.rank ;;
+  dimension: name {
+    type: string
+    sql: ${TABLE}.name ;;
   }
 
   dimension: retail_price {
@@ -45,6 +49,6 @@ view: products {
 
   measure: count {
     type: count
-    drill_fields: [id, item_name, inventory_items.count, product_facts.count]
+    drill_fields: [id, name]
   }
 }

@@ -1,7 +1,7 @@
-connection: "dev_redshift"
+# connection: "thelook_events_redshift"
 
 include: "*.view.lkml"         # include all views in this project
-include: "*.dashboard.lookml"  # include all dashboards in this project
+# include: "*.dashboard.lookml"  # include all dashboards in this project
 
 include: "base_order_items_model.model.lkml" # include base model
 

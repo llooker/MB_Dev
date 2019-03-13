@@ -1,10 +1,10 @@
-connection: "dev_redshift"
+connection: "thelook_events_redshift"
 
 # include all the views
 include: "*.view"
 
 # include all the dashboards
-include: "*.dashboard"
+# include: "*.dashboard"
 
 explore: inventory_items {
   join: products {
@@ -17,16 +17,10 @@ explore: inventory_items {
 explore: order_items {
   always_filter: {
     filters: {
-        field: orders.created_date
+        field: order_items.created_date
         value: "7 days ago for 7 days"
       }
     }
-
-  join: orders {
-    type: left_outer
-    sql_on: ${order_items.order_id} = ${orders.id} ;;
-    relationship: many_to_one
-  }
 
   join: inventory_items {
     type: left_outer
@@ -37,7 +31,7 @@ explore: order_items {
   join: users {
     from: users
     type: left_outer
-    sql_on: ${orders.user_id} = ${users.id} ;;
+    sql_on: ${order_items.user_id} = ${users.id} ;;
     relationship: many_to_one
   }
 
@@ -48,13 +42,13 @@ explore: order_items {
   }
 }
 
-explore: orders {
-  join: users {
-    type: left_outer
-    sql_on: ${orders.user_id} = ${users.id} ;;
-    relationship: many_to_one
-  }
-}
+# explore: order_items {
+#   join: users {
+#     type: left_outer
+#     sql_on: ${order_items.user_id} = ${users.id} ;;
+#     relationship: many_to_one
+#   }
+# }
 
 explore: product_facts {
   join: products {
@@ -70,20 +64,20 @@ explore: users {
 }
 
 
-explore:  orders_users_ext {
-  from: orders
-  view_name: orders
-  view_label: "orders_ext"
-  extends: [orders]
-  hidden: no
-
-#   sql_always_where: ${users.created_date} > "2016-01-01" ;;
-  join: users {
-#       sql_table_name: public.users ;;
-      from: users_ext
-      type: left_outer
-      relationship: many_to_one
-      sql_on: ${users.id} = ${orders.user_id} ;;
-      #fields: [detail_fields*]
-  }
-}
+# explore:  orders_users_ext {
+#   from: orders
+#   view_name: orders
+#   view_label: "orders_ext"
+#   extends: [orders]
+#   hidden: no
+#
+# #   sql_always_where: ${users.created_date} > "2016-01-01" ;;
+#   join: users {
+# #       sql_table_name: public.users ;;
+#       from: users_ext
+#       type: left_outer
+#       relationship: many_to_one
+#       sql_on: ${users.id} = ${orders.user_id} ;;
+#       #fields: [detail_fields*]
+#   }
+# }
