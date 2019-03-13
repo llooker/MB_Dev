@@ -12,6 +12,18 @@ view: users {
     sql: ${TABLE}.age ;;
   }
 
+  dimension: is_senior {
+    type: yesno
+    sql: ${age} > 60 ;;
+  }
+
+  dimension: age_tier {
+    type: tier
+    tiers: [15, 25, 35, 45, 60]
+    sql: ${age}  ;;
+    style: interval
+  }
+
   dimension: city {
     type: string
     sql: ${TABLE}.city ;;
@@ -19,7 +31,6 @@ view: users {
 
   dimension: country {
     type: string
-    map_layer_name: countries
     sql: ${TABLE}.country ;;
   }
 
@@ -57,16 +68,6 @@ view: users {
     sql: ${TABLE}.last_name ;;
   }
 
-  dimension: latitude {
-    type: number
-    sql: ${TABLE}.latitude ;;
-  }
-
-  dimension: longitude {
-    type: number
-    sql: ${TABLE}.longitude ;;
-  }
-
   dimension: state {
     type: string
     sql: ${TABLE}.state ;;
@@ -82,8 +83,31 @@ view: users {
     sql: ${TABLE}.zip ;;
   }
 
+  dimension: random_gen {
+    type: number
+    sql: random()  ;;
+  }
+
   measure: count {
     type: count
-    drill_fields: [id, first_name, last_name, events.count, order_items.count]
+    drill_fields: [id, first_name, last_name, orders.count]
   }
+
+
+  measure: senior_count {
+      type: count
+      filters: {
+          field: is_senior
+          value: "yes"
+      }
+  }
+
+  # example or Tier dim
+#   dimension: age_tier {
+#     type: tier
+#     tiers: [15, 25, 35, 45, 55, 65]
+#     sql: ${age} ;;
+#     style: integer
+#   }
+
 }
