@@ -1,6 +1,107 @@
 view: order_items {
   sql_table_name: public.order_items ;;
 
+  filter: date_range_filter {
+    # define the date range for initial filter. The date range specified here will be used to compare
+    # against one or more preceding periods
+    type:  date
+    convert_tz: no # not required. used here to simplify code
+  }
+
+  parameter: period_duration_filter {
+    # home many previous periods do you want to compare against.
+    type: number
+    allowed_value: {
+      value: "1"
+    }
+    allowed_value: {
+      value: "2"
+    }
+    allowed_value: {
+      value: "3"
+    }
+    allowed_value: {
+      value: "4"
+    }
+    default_value: "2"
+    # number of periods to compare 2, 3, 5, etc
+  }
+
+  parameter: period_comparison_filter {
+    # Select the period to comapre against.. If Year is selected, the date ranges will be compared
+    # for number of years defined in period_duration_filter. If Months is selected, we will compare against
+    # number of preceeding months
+    type: string
+     allowed_value: {
+      value: "Year"
+    }
+    allowed_value: {
+      value: "Month"
+    }
+    default_value: "Year"
+    # type of periods to compare - preceding month, year
+  }
+
+  parameter: display_granularity_filter {
+    type: string
+    allowed_value: {
+        value: "Day"
+    }
+    allowed_value: {
+      value: "Week"
+    }
+    allowed_value: {
+      value: "Month"
+    }
+  }
+
+  dimension_group: date_start_date {
+    type: time
+    timeframes: [date, month, year]
+    sql: COALESCE({% date_start date_range_filter %}, current_date) ;;
+  }
+
+  dimension_group: date_end_date {
+    type: time
+    timeframes: [date, month, year]
+    sql: COALESCE({% date_end date_range_filter %}, current_date) ;;
+  }
+
+  dimension: first_period_start_date {
+    type: date
+    sql: DATEADD( {% parameter period_comparison_filter %},
+                  {% parameter period_duration_filter %} * -1,
+                  ${date_start_date_date} )
+        ;;
+  }
+
+  dimension: period_display {
+    type: string
+    label_from_parameter: period_comparison_filter
+    sql: CASE WHEN {% parameter period_comparison_filter %} = 'Year' THEN
+                 CAST(${created_year} AS VARCHAR)
+              WHEN {% parameter period_comparison_filter %} = 'Month' THEN
+                  ${created_month}
+              END
+
+        ;;
+  }
+
+  dimension: granularity_display {
+    type: number
+    label_from_parameter: display_granularity_filter
+    sql:  CASE WHEN {% parameter display_granularity_filter %} = 'Month' THEN
+                 ${created_month_num}
+              WHEN {% parameter display_granularity_filter %} = 'Week' THEN
+                  (${created_week_of_year})
+              WHEN {% parameter display_granularity_filter %} = 'Day' THEN
+                  (${created_day_of_month})
+              END
+
+        ;;
+  }
+
+
   dimension: id {
     primary_key: yes
     type: number
@@ -13,12 +114,17 @@ view: order_items {
       raw,
       time,
       date,
+      day_of_week,
       week,
+      week_of_year,
       month,
+      month_num,
+      day_of_month,
       quarter,
       year
     ]
     sql: ${TABLE}.created_at ;;
+    convert_tz: no
   }
 
   dimension_group: delivered {

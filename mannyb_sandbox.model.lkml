@@ -10,7 +10,7 @@ datagroup: mannyb_sandbox_default_datagroup {
 
 persist_with: mannyb_sandbox_default_datagroup
 
-explore: bsandell {}
+
 
 explore: company_list {}
 
@@ -39,6 +39,27 @@ explore: inventory_items {
 }
 
 explore: order_items {
+  sql_always_where:
+      ${created_date} BETWEEN ${first_period_start_date} AND ${date_end_date_date}
+      AND EXTRACT('month' from created_at)
+            IN ( SELECT DISTINCT EXTRACT('month' from created_at)
+                  FROM public.order_items
+                  WHERE created_at BETWEEN
+                      {% if order_items.period_comparison_filter._parameter_value == "'Year'" %}
+                       ${date_start_date_date} AND ${date_end_date_date}
+                      {% elsif order_items.period_comparison_filter._parameter_value == "'Month'" %}
+                       ${first_period_start_date} AND ${date_end_date_date}
+                      {% endif %}
+                      )
+      AND EXTRACT('day' from created_at)
+            IN ( SELECT DISTINCT EXTRACT('day' from created_at)
+                  FROM public.order_items
+                  WHERE created_at BETWEEN ${date_start_date_date} AND ${date_end_date_date})
+
+  ;;
+#      AND ${created_month} BETWEEN ${date_start_date_month} AND ${date_end_date_month}
+
+
   join: users {
     type: left_outer
     sql_on: ${order_items.user_id} = ${users.id} ;;
