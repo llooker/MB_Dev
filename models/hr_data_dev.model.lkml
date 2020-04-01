@@ -2,7 +2,7 @@ connection: "thelook_events_redshift"
 
 # include all views in this project
 #- include: "*.dashboard.lookml"  # include all dashboards in this project
-include: "*.view"
+include: "/*/*.view"
 
 explore: hr_looker_training_set {}
 

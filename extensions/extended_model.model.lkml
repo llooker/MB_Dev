@@ -2,6 +2,7 @@
 
 include: "*.view.lkml"         # include all views in this project
 # include: "*.dashboard.lookml"  # include all dashboards in this project
+# include: "snowlooker.model.lkml"
 
 include: "base_order_items_model.model.lkml" # include base model
 
