@@ -7,7 +7,8 @@ connection: "thelook"
 ## Adding test comments 4
 
 # include all the views
-include: "*.view"
+include: "/*.view"
+include: "/views/*.view"
 
 # include all the dashboards
 include: "*.dashboard"
@@ -28,6 +29,15 @@ conditionally_filter: {}
   }
 }
 
+test: order_count_test {
+  explore_source: order_items {
+    column: count {field:order_items.count}
+  }
+  assert: has_orders {
+    expression: ${count} > 10 ;;
+  }
+}
+
 explore: inventory_items {
   join: products {
     type: left_outer
@@ -37,6 +47,11 @@ explore: inventory_items {
 }
 
 explore: order_items {
+  access_filter: {
+    field: users.email
+    user_attribute: email
+  }
+  always_join: [users]
   join: inventory_items {
     type: left_outer
     sql_on: ${order_items.inventory_item_id} = ${inventory_items.id} ;;

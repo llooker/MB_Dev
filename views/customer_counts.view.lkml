@@ -11,6 +11,10 @@ view: customer_counts {
   derived_table: {
     sql:
     SELECT orders.user_id user_id,
+         {% if date_granularity._parameter_value == 'DATE' %} DATE(orders.created_at)
+         {% elsif date_granularity._parameter_value == 'MONTH' %} DATE(orders.created_at, '%y-%m')
+         {% elsif date_granularity._parameter_value == 'YEAR' %} YEAR(orders.created_at)
+          {% endif %} as order_date,
            COUNT(DISTINCT orders.id ) customer_distinct_order_count,
            COUNT(orders.id) customer_total_orders,
            MAX(NULLIF(orders.created_at, 0)) customer_last_order_date,
@@ -23,16 +27,55 @@ view: customer_counts {
         --{% date_start orders_after %} AND {% date_end orders_after %}
        COALESCE( {% date_start orders_after %}, DATE_ADD({% date_end orders_after %}, INTERVAL -30 DAY))
        AND {% date_end orders_after %}
-        GROUP BY orders.user_id  ;;
+        GROUP BY orders.user_id,
+         {% if date_granularity._parameter_value == 'DATE' %} DATE(orders.created_at)
+         {% elsif date_granularity._parameter_value == 'MONTH' %} DATE(orders.created_at, '%y-%m')
+         {% elsif date_granularity._parameter_value == 'YEAR' %} YEAR(orders.created_at)
+          {% endif %}
+          ;;
       #indexes: ["user_id"]
       #sql_trigger_value: SELECT CURDATE() ;;
       # persist_for: "24 hours"
     }
 
+parameter: date_granularity {
+  type:  unquoted
+  allowed_value: {
+    value: "DATE"
+  }
+  allowed_value: {
+    value: "MONTH"
+  }
+  allowed_value: {
+    value: "YEAR"
+  }
+}
+
+
   dimension: create_start_date {
     type: string
     hidden: yes
     sql: COALESCE( {% date_start orders_after %}, DATEADD(${create_end_date}, INTERVAL DAY -30) ;;
+  }
+
+
+
+dimension: created_date {
+  type: date
+  sql: ${TABLE}.created_date ;;
+}
+
+dimension: period {
+  type: string
+  sql: CASE WHEN ${created_date} BETWEEN  ${create_start_date} AND ${create_end_date} THEN 'Current Period'
+      ELSE 'Previous Period'
+      END;;
+}
+  parameter: user_state {
+    type: string
+  suggest_explore: users
+  suggest_dimension: users.state
+
   }
 
   dimension: create_end_date {
