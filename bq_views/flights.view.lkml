@@ -1,6 +1,6 @@
 
 view: flights {
-  sql_table_name: flights ;;
+  sql_table_name: `lookerdata.faa.flights` ;;
 
   dimension: id {
     primary_key: yes
@@ -11,6 +11,7 @@ view: flights {
 ###################### TRAINING FIELDS ###########################
 
   dimension: distance {
+
     type: number
     sql: ${TABLE}.distance ;;
   }
@@ -94,6 +95,16 @@ view: flights {
     sql: ${TABLE}.dep_time ;;
   }
 
+  dimension: depart_week_num {
+    type: string
+    sql:  format_date('%Y%W', ${depart_date}) ;;
+  }
+
+  dimension: dummy_sort {
+    type:  number
+    sql:   UNIX_MILLIS(${depart_raw}) ;;
+  }
+
 ########################################################################################
 
   dimension: arrival_delay {
@@ -120,6 +131,7 @@ view: flights {
     view_label: "Flights Details"
     type: string
     sql: ${TABLE}.carrier ;;
+    order_by_field: dummy_sort
   }
 
   dimension: departure_delay {

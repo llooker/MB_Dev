@@ -123,7 +123,8 @@ view: order_items {
       month_name,
       day_of_month,
       quarter,
-      year
+      year,
+       millisecond
     ]
     sql: ${TABLE}.created_at ;;
     convert_tz: no
@@ -142,6 +143,16 @@ view: order_items {
     ]
     sql: ${TABLE}.delivered_at ;;
   }
+
+  dimension: created_month_str {
+    type: string
+    sql: to_char(${created_date}, 'YYYY-MM') ;;
+    order_by_field: id
+    # suggest_explore: dummy_v
+    # suggest_dimension: dummy_v.created_month
+    # alpha_sort: yes
+  }
+
 
   dimension: inventory_item_id {
     type: number
@@ -190,6 +201,16 @@ view: order_items {
     can_filter: no
     type: string
     sql: ${TABLE}.status ;;
+    html:
+    <div style="dropdown dropright">
+    <details>
+    <summary>
+    <i>View Status</i>
+    </summary>
+    {{ rendered_value}}</details>
+    </div>
+
+    ;;
   }
 
   dimension: user_id {
@@ -201,6 +222,35 @@ view: order_items {
     type: count_distinct
     sql: ${id} ;;
     drill_fields:  [created_time, total_revenue]
+    html:
+    {% if value <= 50 %}
+    <span class="fa-stack fa-lg">
+          <i class="fa fa-square fa-stack-2x" style="color:#0071bc"></i>
+          <span class="fa-stack-1x fa-inverse" style="font-weight:600;">A</span>
+        </span>
+    {% endif %}
+    {% if value > 50 and value < 100 %}
+     <span class="fa-stack fa-lg">
+          <i class="fa fa-square fa-stack-2x" style="color:#162e4c"></i>
+          <span class="fa-stack-1x fa-inverse" style="font-weight:600;">E</span>
+        </span>
+    {% endif %}
+    {% if value > 100 and value <= 500 %}
+   <span style="verical-align:top;cursor:help; font-size:9px;padding-top:5px;" title="Federal Debt:
+        Grantee has outstanding federal debt [SAM]">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-square fa-stack-2x" style="color:#00aa76"></i>
+          <span class="fa-stack-1x fa-inverse" style="font-weight:600;">D</span>
+        </span>
+      </span>
+    {% endif %}
+    {% if value > 500 %}
+     <span class="fa-stack fa-lg">
+            <i class="fa fa-square fa-stack-2x" style="color:#eb6530"></i>
+            <span class="fa-stack-1x fa-inverse" style="font-weight:600;">O</span>
+          </span>
+      {% endif %}
+    ;;
   }
 
 
@@ -338,4 +388,141 @@ measure: max_created_datetime {
     } # NOTE the &pivots=
   }
 
+
+  measure: max_findings_tier_score {
+    label: "Max Findings Tier"
+    description: "The grantee's maximum A-133 findings tier within the filtered years, on a scale of 1 (least issues) to 5 (most issues)"
+    type: string
+    sql:case
+            when ${count} > 0 and ${count} <= 10 then 1
+             when ${count} > 10 and ${count} <= 50 then 2
+             when ${count} > 50 and ${count} <= 100 then 3
+             when ${count} > 100 and ${count} <= 200 then 4
+             when ${count} > 200 and ${count} < 1000 then 5
+        end
+    ;;
+  #   html:
+  #   <center>
+
+  #   {% if {{value}} == 1  %}
+  #   <span class="fa-stack fa-lg">
+  #   <i class="fa fa-circle fa-stack-2x" style="color:#D8BCF2"></i>
+  #   <span class="fa-stack-1x fa-inverse" style="font-weight:600;">1</span>
+  #   </span>
+  #   {% endif %}
+
+  #   {% if {{value}} == 2  %}
+  #   <span class="fa-stack fa-lg">
+  #   <i class="fa fa-circle fa-stack-2x" style="color:#AC6EE4"></i>
+  #   <span class="fa-stack-1x fa-inverse" style="font-weight:600;">2</span>
+  #   </span>
+
+  #   {% endif %}
+
+  #   {% if {{value}} == 3  %}
+  #   <span class="fa-stack fa-lg">
+  #   <i class="fa fa-circle fa-stack-2x" style="color:#7F1DCF"></i>
+  #   <span class="fa-stack-1x fa-inverse" style="font-weight:600;">3</span>
+  #   </span>
+  #   {% endif %}
+
+  #   {% if {{value}} == 4  %}
+  #   <span class="fa-stack fa-lg">
+  #   <i class="fa fa-circle fa-stack-2x" style="color:#521985"></i>
+  #   <span class="fa-stack-1x fa-inverse" style="font-weight:600; height:80%">4</span>
+  #   </span>
+  #   {% endif %}
+
+  #   {% if {{value}} == 5  %}
+  # <span class="fa-stack fa-lg">
+  #   <i class="fa fa-circle fa-stack-2x" style="color:#2F0E4C"></i>
+  #   <span class="fa-stack-1x fa-inverse" style="font-weight:600;">5</span>
+  #   </span>
+  #   {% endif %}
+
+  #   ;;
+
+
+
+    html:
+      <center>
+
+    {% if {{value}} == 1  %}
+      <span style="verical-align:top;cursor:help; font-size:9px; padding-top:2px" title="Tier 1
+      Maximum tier for the filtered years on a
+      scale of 1 (least issues) to 5 (most issues)">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-circle fa-stack-2x" style="color:#D8BCF2"></i>
+          <span class="fa-stack-1x fa-inverse" style="font-weight:600;">1</span>
+        </span>
+      </span>
+    {% endif %}
+
+    {% if {{value}} == 2  %}
+
+      <span style="verical-align:top;cursor:help; font-size:9px; padding-top:2px" title="Tier 2
+      Maximum tier for the filtered years on a
+      scale of 1 (least issues) to 5 (most issues)">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-circle fa-stack-2x" style="color:#AC6EE4"></i>
+          <span class="fa-stack-1x fa-inverse" style="font-weight:600;">2</span>
+        </span>
+      </span>
+    {% endif %}
+
+    {% if {{value}} == 3  %}
+      <span style="verical-align:top;cursor:help; font-size:9px; padding-top:2px" title="Tier 3
+      Maximum tier for the filtered years on a
+      scale of 1 (least issues) to 5 (most issues)">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-circle fa-stack-2x" style="color:#7F1DCF"></i>
+          <span class="fa-stack-1x fa-inverse" style="font-weight:600;">3</span>
+        </span>
+      </span>
+    {% endif %}
+
+    {% if {{value}} == 4  %}
+      <span style="verical-align:top;cursor:help; font-size:9px; padding-top:2px" title="Tier 4
+      Maximum tier for the filtered years on a
+      scale of 1 (least issues) to 5 (most issues)">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-circle fa-stack-2x" style="color:#521985"></i>
+          <span class="fa-stack-1x fa-inverse" style="font-weight:600;">4</span>
+        </span>
+      </span>
+    {% endif %}
+
+    {% if {{value}} == 5  %}
+      <span style="verical-align:top;cursor:help; font-size:9px; padding-top:2px;" title="Tier 5
+      Maximum tier for the filtered years on a
+      scale of 1 (least issues) to 5 (most issues)">
+        <span class="fa-stack fa-lg">
+          <i class="fa fa-circle fa-stack-2x" style="color:#2F0E4C"></i>
+          <span class="fa-stack-1x fa-inverse" style="font-weight:600;">5</span>
+        </span>
+      </span>
+    {% endif %}
+    </center>;;
+  }
+
+
+
+  measure: max_findings_tier_score_2 {
+    label: "Max Findings Tier"
+    description: "The grantee's maximum A-133 findings tier within the filtered years, on a scale of 1 (least issues) to 5 (most issues)"
+    type: string
+    sql:case
+            when ${count} > 0 and ${count} <= 10 then 1
+             when ${count} > 10 and ${count} <= 50 then 2
+             when ${count} > 50 and ${count} <= 100 then 3
+             when ${count} > 100 and ${count} <= 200 then 4
+             when ${count} > 200 and ${count} < 1000 then 5
+        end
+    ;;
+
+    html:
+    {% assign flag_value = value  %}
+    @{flag_display}
+    ;;
+  }
 }

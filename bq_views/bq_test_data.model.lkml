@@ -45,4 +45,12 @@ explore: flights {
     relationship: many_to_one
     fields: [full_name, city, state, code]
   }
+
+  query: flights_by_month{
+    dimensions: [depart_month]
+    measures: [count, average_distance]
+    # filters: {field: depart_month value:"last 3 years"}
+    limit:10
+  }
+
 }
