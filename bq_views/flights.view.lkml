@@ -52,10 +52,10 @@ view: flights {
     type: sum
     sql: ${distance} ;;
 
-    filters: {
-      field: is_long_flight
-      value: "Yes"
-    }
+#     filters: {
+#       field: is_long_flight
+#       value: "Yes"
+#     }
   }
 
   measure: count_long_flight {
@@ -97,12 +97,14 @@ view: flights {
 
   dimension: depart_week_num {
     type: string
-    sql:  format_date('%Y%W', ${depart_date}) ;;
+    sql:  format_timestamp('%Y%W', ${TABLE}.dep_time) ;;
+    order_by_field: dummy_sort
   }
 
   dimension: dummy_sort {
     type:  number
-    sql:   UNIX_MILLIS(${depart_raw}) ;;
+    sql:   -UNIX_MILLIS(${depart_raw}) ;;
+
   }
 
 ########################################################################################

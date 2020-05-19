@@ -3,6 +3,10 @@ connection: "snowlooker"
 include: "/*/*.view.lkml"                       # include all views in this project
 # include: "my_dashboard.dashboard.lookml"   # include a LookML dashboard called my_dashboard
 
+datagroup: ecommerce_etl {
+  sql_trigger: select current_date ;;
+  max_cache_age: "1 hour"
+}
 # # Select the views that should be a part of this model,
 # # and define the joins that connect them together.
 #
@@ -18,9 +22,56 @@ include: "/*/*.view.lkml"                       # include all views in this proj
 #   }
 # }
 
-aggregate_awareness: yes
+# aggregate_awareness: yes
 
-case_sensitive: no
+explore: agg_aware {
+  from: order_items
+  view_name: order_items
+  extends: [order_items]
+  label: "Agg Aware Order Items"
+  aggregate_table: sale_price_by_day {
+    query: {
+      dimensions: [order_items.created_date]
+      measures: [order_items.total_revenue, order_items.count]
+      timezone: America/Los_Angeles
+    }
+    materialization: {
+      datagroup_trigger: ecommerce_etl
+    }
+  }
+  aggregate_table: sale_price_by_week {
+    query: {
+      dimensions: [order_items.created_week]
+      measures: [order_items.total_revenue, order_items.count, order_items.average_sales_price]
+      # filters: [order_items.status: "Complete"]
+      timezone: America/Los_Angeles
+    }
+    materialization: {
+      datagroup_trigger: ecommerce_etl
+    }
+  }
+  aggregate_table: sale_price_by_status {
+    query: {
+      dimensions: [order_items.created_date, order_items.status]
+      measures: [order_items.total_revenue, order_items.count]
+      timezone: America/Los_Angeles
+    }
+    materialization: {
+      datagroup_trigger: ecommerce_etl
+    }
+  }
+  aggregate_table: sales_price_by_brand {
+    query: {
+    dimensions: [inventory_items.created_date, products.brand]
+    measures: [order_items.total_revenue, order_items.count, ]
+   }
+    materialization: {
+      datagroup_trigger: ecommerce_etl
+    }
+  }
+}
+
+# case_sensitive: no
 
 explore: events {
   join: users {

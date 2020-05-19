@@ -6,9 +6,7 @@ include: "/dummy_v.view"
 
 # include all the dashboards
 # include: "*.dashboard"
-explore: dummy_view {}
 
-explore: dummy_v {}
 
 explore: inventory_items {
   join: products {

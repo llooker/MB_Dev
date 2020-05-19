@@ -1,3 +1,4 @@
+
 view: products {
   sql_table_name: public.products ;;
 
@@ -22,23 +23,23 @@ view: products {
       icon_url: "https://upload.wikimedia.org/wikipedia/commons/c/c2/F_icon.svg"
     }
 
-    link: {
-      label: "{{value}} Analytics Dashboard"
-      url: "/dashboards/lUUVihaIO8haWkmECYYPzF?Brand={{ value | encode_uri }}&State={{ _filters['users.state'] }}"
-      icon_url: "http://www.looker.com/favicon.ico"
-    }
+    # link: {
+    #   label: "{{value}} Analytics Dashboard"
+    #   url: "/dashboards/lUUVihaIO8haWkmECYYPzF?Brand={{ value | encode_uri }}&State={{ _filters['users.state'] }}"
+    #   icon_url: "http://www.looker.com/favicon.ico"
+    # }
 
-    link: {
-      label: "{{value}} Category Look"
-      url: "/looks/517?f[products.brand]={{ value | encode_uri }}&f[users.state]={{ _filters['users.state'] }}"
-      icon_url: "http://www.looker.com/favicon.ico"
-    }
+    # link: {
+    #   label: "{{value}} Category Look"
+    #   url: "/looks/517?f[products.brand]={{ value | encode_uri }}&f[users.state]={{ _filters['users.state'] }}"
+    #   icon_url: "http://www.looker.com/favicon.ico"
+    # }
 
-    link: {
-      label: "Explore Users"
-      url: "/explore/mannyb_sandbox/order_items?fields=users.id,users.name&f[products.brand]={{ value | encode_uri }}&f[users.state]={{ _filters['users.state'] }}"
-      icon_url: "http://www.looker.com/favicon.ico"
-    }
+    # link: {
+    #   label: "Explore Users"
+    #   url: "/explore/mannyb_sandbox/order_items?fields=users.id,users.name&f[products.brand]={{ value | encode_uri }}&f[users.state]={{ _filters['users.state'] }}"
+    #   icon_url: "http://www.looker.com/favicon.ico"
+    # }
 
 
     drill_fields: [category, name]

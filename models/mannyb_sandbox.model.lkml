@@ -12,7 +12,6 @@ persist_with: mannyb_sandbox_default_datagroup
 
 case_sensitive: no
 
-explore: company_list {}
 
 explore: distribution_centers {}
 
@@ -25,6 +24,7 @@ explore: events {
 }
 
 explore: inventory_items {
+  fields: [-products.brand]
   join: products {
     type: left_outer
     sql_on: ${inventory_items.product_id} = ${products.id} ;;

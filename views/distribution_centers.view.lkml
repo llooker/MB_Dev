@@ -27,6 +27,7 @@ view: distribution_centers {
     sql_latitude: ${latitude} ;;
     sql_longitude: ${longitude} ;;
     html: {{ name._rendered_value }} ;;
+    map_layer_name: us_states
   }
 
   measure: count {

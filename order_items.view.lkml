@@ -198,4 +198,35 @@ view: order_items {
     type: count
     drill_fields: [id]
   }
+
+  measure: total_sales_price {
+    type: sum
+    sql: ${sale_price} ;;
+   value_format_name: usd
+  }
+
+  measure: average_sales_price {
+    type: average
+    sql: ${sale_price} ;;
+    value_format_name: usd
+  }
+
+  dimension: display_tip {
+    type: string
+    sql: "" ;;
+    html:
+    This is a test;;
+  }
+
+  measure: display_more_in_tool_tip{
+    type: sum
+    value_format_name: usd
+    sql: ${sale_price} ;;
+    html:
+        <summary style="outline:none"> Sales Price: {{ display_more_in_tool_tip.rendered_value }}</summary>
+        <summary style="outline:none"> Average Sales Price: {{ average_sales_price._rendered_value }}</summary>
+        <summary style="outline:none">  Count of Items: {{ count._rendered_value }}</summary>
+        <summary style="outline:none">  Total Sales Price: {{ total_sales_price._rendered_value }}</summary>
+        <br/>;;
+  }
 }
