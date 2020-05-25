@@ -55,6 +55,7 @@ explore: agg_aware {
       dimensions: [order_items.created_date, order_items.status]
       measures: [order_items.total_revenue, order_items.count]
       timezone: America/Los_Angeles
+      filters: [order_items.created_date: "last 30 days"]
     }
     materialization: {
       datagroup_trigger: ecommerce_etl
@@ -62,8 +63,9 @@ explore: agg_aware {
   }
   aggregate_table: sales_price_by_brand {
     query: {
-    dimensions: [inventory_items.created_date, products.brand]
+    dimensions: [order_items.created_date, products.brand]
     measures: [order_items.total_revenue, order_items.count, ]
+    filters: [order_items.created_date: "last 30 days"]
    }
     materialization: {
       datagroup_trigger: ecommerce_etl

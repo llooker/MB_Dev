@@ -8,6 +8,25 @@ view: products {
     sql: ${TABLE}.id ;;
   }
 
+  dimension: brand_url {
+    sql:
+    {% if _user_attributes['state'] == 'New York' %}
+     '/projects/opioid_overdose/documents/menu.md'
+    {% else %}
+     '/some_dummy_url'
+    {% endif %}
+    ;;
+  }
+
+  dimension: brand_demo {
+    type: string
+    sql: ${TABLE}.brand ;;
+    html:
+    <h1><font color=Aquamarine><i class='fa fa-bar-chart-o fa-4x'></i></font></h1>"
+    <h2><a href="{{brand_url._value}}">Medicare Opioid Overdose Dashboard (MOOD)</a><br>(Authorized Access Only)</h2>
+    ;;
+  }
+
   dimension: brand {
     type: string
     sql: ${TABLE}.brand ;;
