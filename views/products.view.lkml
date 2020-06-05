@@ -44,7 +44,7 @@ view: products {
 
     # link: {
     #   label: "{{value}} Analytics Dashboard"
-    #   url: "/dashboards/lUUVihaIO8haWkmECYYPzF?Brand={{ value | encode_uri }}&State={{ _filters['users.state'] }}"
+    #   url: "/dashboards/@{test}?Brand={{ value | encode_uri }}&State={{ _filters['users.state'] }}"
     #   icon_url: "http://www.looker.com/favicon.ico"
     # }
 

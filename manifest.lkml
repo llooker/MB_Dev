@@ -7,7 +7,9 @@ project_name: "mannyb_sandbox"
 #   project: 'name_of_other_project'
 # }
 
-
+constant: test {
+  value: "10"
+}
 
 constant: flag_display {
   value: "

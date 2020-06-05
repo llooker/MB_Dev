@@ -2,6 +2,7 @@ connection: "thelook_events_redshift"
 
 # include all the views
 include: "/*/*.view"
+# include: "/*.dashboard"
 
 datagroup: mannyb_sandbox_default_datagroup {
   sql_trigger: SELECT MAX(id) FROM order_items;;

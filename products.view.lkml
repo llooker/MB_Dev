@@ -11,6 +11,10 @@ view: products {
   dimension: brand {
     type: string
     sql: ${TABLE}.brand ;;
+    link: {
+
+    url: "/dashboards/@{test}"
+    }
   }
 
   dimension: category {

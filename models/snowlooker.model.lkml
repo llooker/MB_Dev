@@ -24,6 +24,21 @@ datagroup: ecommerce_etl {
 
 # aggregate_awareness: yes
 
+test: status_is_not_null {
+  explore_source: agg_aware {
+    column: status {field: order_items.status}
+    sort: {
+      field: order_items.status
+      desc: yes
+    }
+    limit: 1
+  }
+  assert: status_is_not_null {
+    expression: NOT is_null(${order_items.status}) ;;
+  }
+}
+
+
 explore: agg_aware {
   from: order_items
   view_name: order_items
