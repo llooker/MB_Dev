@@ -5,7 +5,7 @@ view: sfx_test {
      sql_step: msck repair table looker_test.orders ;;
       # step 2: clean deat names
       sql_step:
-          select id as order_id, created_at, user_id, amount from looker_test.orders
+          select id as order_id, created_at, user_id, order_amount from looker_test.orders
         ;;
       # step 3: append to deal table
 
