@@ -21,6 +21,7 @@ datagroup: ecommerce_etl {
 #     sql_on: ${users.id} = ${orders.user_id} ;;
 #   }
 # }
+## test comment
 
 # aggregate_awareness: yes
 

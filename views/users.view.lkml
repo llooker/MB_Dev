@@ -106,6 +106,51 @@ dimension: name {
       }
   }
 
+  dimension: url_gen {
+    type:  string
+    sql:
+     {% assign company_name = _user_attributes['company'] %}
+     {% if company_name == 'exploredx-team' %}
+      'https://{{company_name._value}}.pdxinc.com/looks/6673'
+     {% elsif company_name  == 'exploredx-preprod') %}
+      'https://{{company_name._value}}.pdxinc.com/looks/18?'
+     {% else %}
+      'https://{{company_name._value}}.pdxinc.com/looks/16915'
+      {% endif %}
+    ;;
+  }
+
+  dimension: zip_html_test {
+    label: "Prescription Transaction ID"
+    description: "Unique ID number identifying a transanction record within a pharmacy chain"
+    type: zipcode
+    sql: ${zip} ;;
+
+#     link: {
+#       label: "Workflow Task Analysis"
+#       url: "https://{{ _user_attributes['company'] }}.pdxinc.com/explore/PDX_CUSTOMER_DSS/eps_task_history?fields=eps_task_history.prescription_transaction_workflow_task_analysis_detail*&f[eps_task_history.task_history_action_current_date]=&f[eps_task_history.rx_tx_id]={{ value }}&f[store_alignment.pharmacy_number]={{ _filters['store_alignment.pharmacy_number'] | url_encode }}&sorts=eps_task_history.task_history_action_current_time+desc&limit=500"
+#     }
+
+#     link: {
+#
+#       label: "Task Tracking Detail Report"
+#       url:
+#        "{% if ( _user_attributes['company']  == 'exploredx-team') %}
+#       https://{{ _user_attributes['company'] }}.pdxinc.com/looks/6673?f[eps_task_history.task_history_action_current_date]=&f[eps_task_history.rx_tx_id]={{ value }}&f[store_alignment.pharmacy_number]={{ _filters['store_alignment.pharmacy_number'] | url_encode }}&sorts=eps_task_history.task_history_action_current_time+desc&limit=500
+#       {% elsif ( _user_attributes['company']  == 'exploredx-preprod')%}
+#       https://{{ _user_attributes['company'] }}.pdxinc.com/looks/18?f[eps_task_history.task_history_action_current_date]=&f[eps_task_history.rx_tx_id]={{ value }}&f[store_alignment.pharmacy_number]={{ _filters['store_alignment.pharmacy_number'] | url_encode }}&sorts=eps_task_history.task_history_action_current_time+desc&limit=500
+#       {% else %}
+#       https://{{ _user_attributes['company'] }}.pdxinc.com/looks/16915?f[eps_task_history.task_history_action_current_date]=&f[eps_task_history.rx_tx_id]={{ value }}&f[store_alignment.pharmacy_number]={{ _filters['store_alignment.pharmacy_number'] | url_encode }}&sorts=eps_task_history.task_history_action_current_time+desc&limit=500
+#       {% endif %}"
+#
+#     }
+
+    # link: {
+    #   label: "Task Tracking Detail Report"
+    #   url: "{{ url_gen._value}}f[eps_task_history.task_history_action_current_date]=&f[eps_task_history.rx_tx_id]={{ value }}&f[store_alignment.pharmacy_number]={{ _filters['store_alignment.pharmacy_number'] | url_encode }}&sorts=eps_task_history.task_history_action_current_time+desc&limit=500"
+    # }
+  }
+
   # example or Tier dim
 #   dimension: age_tier {
 #     type: tier
