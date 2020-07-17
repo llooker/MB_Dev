@@ -9,3 +9,5 @@ datagroup: sfx_refresh {
 explore: test_view_1  {}
 
 explore: manny_test {}
+
+explore: sfx_test {}

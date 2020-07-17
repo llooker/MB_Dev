@@ -20,9 +20,7 @@ view: test_view_1 {
               where cast(created_at as date) >= (select cast(max(created_at) as date) max_date from looker_test.orders )
               group by 1;;
 
+      }
+    }
 
-
-    }
-    }
-      dimension: rowcount {}
-    }
+ }
