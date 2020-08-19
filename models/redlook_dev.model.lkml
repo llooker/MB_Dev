@@ -17,6 +17,10 @@ explore: inventory_items {
 }
 
 explore: order_items {
+  access_filter: {
+    field: users.state
+    user_attribute: state
+  }
   always_filter: {
     filters: {
         field: order_items.created_date

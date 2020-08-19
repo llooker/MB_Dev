@@ -25,7 +25,19 @@ explore: events {
 }
 
 explore: inventory_items {
-  fields: [-products.brand]
+  access_filter: {
+    field: products.brand
+    user_attribute: brand
+  }
+
+  # sql_always_where:
+  #   {% _user_attributes["brand"] == 'ABC' %}
+  #   1 =1
+  #   {% else%}
+  #   ${products.brand} = _user_attributes["brand"]
+  #   { endif %%}
+  # ;;
+
   join: products {
     type: left_outer
     sql_on: ${inventory_items.product_id} = ${products.id} ;;

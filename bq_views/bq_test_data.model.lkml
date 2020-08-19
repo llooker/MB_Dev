@@ -4,6 +4,14 @@ include: "/bq_views/*.view.lkml"                # include all views in the views
 # include: "/**/view.lkml"                   # include all views in this project
 # include: "my_dashboard.dashboard.lookml"   # include a LookML dashboard called my_dashboard
 
+
+test: has_value{
+   explore_source: flights
+   assert: check_value {
+    expression: ${flights.count} > 0;;
+    }
+}
+
 explore: flights {
   description: "Start here for information about flights!"
   join: carriers {
@@ -14,7 +22,7 @@ explore: flights {
 
   join: aircraft {
     type: left_outer
-    sql_on: ${flights.tail_num} = ${aircraft.tail_num} ;;
+    sql_on: ${flights.tail_num} = ${aircraft.tail_num};;
     relationship: many_to_one
   }
 
