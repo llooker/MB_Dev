@@ -109,7 +109,7 @@ explore: products {
 explore: user_order_facts {}
 
 explore: users {
-  always_join: [user_order_facts]
+  # always_join: [user_order_facts]
   join: user_order_facts {
     type: inner
     relationship: one_to_one
