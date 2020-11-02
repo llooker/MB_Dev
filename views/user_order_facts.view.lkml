@@ -23,5 +23,7 @@ view: user_order_facts {
     sql: ${TABLE}.user_id ;;
   }
 
+  dimension: order_count {}
+
 
 }

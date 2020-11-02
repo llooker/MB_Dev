@@ -17,6 +17,7 @@ case_sensitive: no
 explore: distribution_centers {}
 
 explore: events {
+  description: "this is sample description to ensure that i an see this in data ditionary app"
   join: users {
     type: left_outer
     sql_on: ${events.user_id} = ${users.id} ;;

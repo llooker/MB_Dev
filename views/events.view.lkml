@@ -8,6 +8,8 @@ view: events {
   }
 
   dimension: browser {
+    description: "this is sample description to ensure that i an see this text in Events view"
+
     type: string
     sql: ${TABLE}.browser ;;
   }
