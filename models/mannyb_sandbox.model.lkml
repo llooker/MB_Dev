@@ -2,7 +2,8 @@ connection: "thelook_events_redshift"
 
 # include all the views
 include: "/*/*.view"
-# include: "/*.dashboard"
+include: "/*/*.dashboard"
+# include: "/*.strings.json"
 
 datagroup: mannyb_sandbox_default_datagroup {
   sql_trigger: SELECT MAX(id) FROM order_items;;
@@ -96,6 +97,19 @@ explore: order_items {
     type: left_outer
     sql_on: ${products.distribution_center_id} = ${distribution_centers.id} ;;
     relationship: many_to_one
+  }
+
+  query: top_5_sales_by_state {
+    dimensions: [users.state]
+    measures: [total_revenue]
+    limit: 5
+    sort: {field:total_revenue desc: yes      }
+  }
+  query: total_users_by_state {
+    dimensions: [users.state]
+    measures: [user_count]
+    limit: 5
+    sort: {field: user_count desc:yes}
   }
 }
 

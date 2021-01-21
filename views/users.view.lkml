@@ -30,6 +30,7 @@ view: users {
   }
 
   dimension: country {
+    label: "Country"
     type: string
     sql: ${TABLE}.country ;;
   }

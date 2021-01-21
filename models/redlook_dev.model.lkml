@@ -48,13 +48,15 @@ explore: order_items {
   }
 }
 
-# explore: order_items {
-#   join: users {
-#     type: left_outer
-#     sql_on: ${order_items.user_id} = ${users.id} ;;
-#     relationship: many_to_one
-#   }
-# }
+explore: order_items_test {
+  from: orders_dynamic
+  label: "Orders Dynamic"
+  join: users {
+    type: left_outer
+    sql_on: ${order_items_test.user_id} = ${users.id} ;;
+    relationship: many_to_one
+  }
+}
 
 explore: product_facts {
   join: products {

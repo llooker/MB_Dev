@@ -85,7 +85,29 @@ view: hr_looker_training_set {
       8000 as salary,
       2012 as hired_year,
       'M' as gender
+
+
+      union all
+
+      select
+      8 as employee_number,
+      'M & M' as name,
+      'Analytics' as department,
+      8000 as salary,
+      2012 as hired_year,
+      'M' as gender
+
+      union all
+
+      select
+      8 as employee_number,
+      'Bob O,brian' as name,
+      'Analytics' as department,
+      8000 as salary,
+      2012 as hired_year,
+      'M' as gender
        ;;
+
   }
 
   ##  DIMENSIONS  ##

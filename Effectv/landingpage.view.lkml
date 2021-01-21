@@ -49,5 +49,17 @@ view: landingpage {
     ;;
   }
 
+  dimension: drill1 {
+    type: string
+    sql: ${TABLE}.val ;;
+    html: "This is a test tool tip" ;;
+
+  }
+ measure: dummyM {
+   type: count
+   drill_fields: [drill1]
+   html: <img src="https://i.ibb.co/55SWppp/Automotive-Polk.png" alt="Automotive-Polk" border="0" width="100%"/>
+    ;;
+ }
 
 }

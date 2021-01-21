@@ -201,6 +201,8 @@ view: order_items {
     can_filter: no
     type: string
     sql: ${TABLE}.status ;;
+    label: "status.label"
+    description: "status.description"
   }
 
   dimension: status_oig_demo {
