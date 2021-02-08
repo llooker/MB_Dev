@@ -124,6 +124,7 @@ view: order_items {
       day_of_month,
       quarter,
       year,
+      hour,
       millisecond
     ]
     sql: ${TABLE}.created_at ;;

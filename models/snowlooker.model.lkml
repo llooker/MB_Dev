@@ -7,6 +7,12 @@ datagroup: ecommerce_etl {
   sql_trigger: select current_date ;;
   max_cache_age: "1 hour"
 }
+
+datagroup: hourly_refresh {
+  sql_trigger: select (DATE_TRUNC('hour', current_timestamp)) ;;
+  max_cache_age: "1 hour"
+}
+
 # # Select the views that should be a part of this model,
 # # and define the joins that connect them together.
 #
@@ -24,6 +30,8 @@ datagroup: ecommerce_etl {
 ## test comment
 
 # aggregate_awareness: yes
+
+explore: order_items_incremental {}
 
 test: status_is_not_null {
   explore_source: agg_aware {
@@ -142,3 +150,5 @@ explore: order_items {
   }
 
 }
+
+explore: users {}
