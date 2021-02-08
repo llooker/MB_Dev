@@ -25,6 +25,7 @@ view: order_items_incremental {
             ID, ORDER_ID, USER_ID, CREATED_AT, SALE_PRICE, STATUS
           FROM "PUBLIC"."ORDER_ITEMS"
           WHERE {% incrementcondition %}  CREATED_AT {% endincrementcondition %}
+          AND CREATED_AT > DATE '2021-01-01'
       ;;
     increment_key: "created_hour"
     increment_offset:  1
