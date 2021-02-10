@@ -13,6 +13,11 @@ datagroup: hourly_refresh {
   max_cache_age: "1 hour"
 }
 
+access_grant: findatausers {
+  user_attribute: can_see_pii
+  allowed_values: ["1"]
+}
+
 # # Select the views that should be a part of this model,
 # # and define the joins that connect them together.
 #

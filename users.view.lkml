@@ -1,3 +1,4 @@
+
 view: users {
   sql_table_name: public.users ;;
   drill_fields: [id]
@@ -11,6 +12,9 @@ view: users {
   dimension: age {
     type: number
     sql: ${TABLE}.age ;;
+    # define a group of users who will have access - access_grants
+    #implement this access grant
+    required_access_grants: [findatausers]
   }
 
   dimension: city {
@@ -22,6 +26,7 @@ view: users {
     type: string
     map_layer_name: countries
     sql: ${TABLE}.country ;;
+    required_access_grants: [findatausers]
   }
 
   dimension_group: created {
@@ -46,16 +51,19 @@ view: users {
   dimension: first_name {
     type: string
     sql: ${TABLE}.first_name ;;
+    required_access_grants: [findatausers]
   }
 
   dimension: gender {
     type: string
     sql: ${TABLE}.gender ;;
+    required_access_grants: [findatausers]
   }
 
   dimension: last_name {
     type: string
     sql: ${TABLE}.last_name ;;
+    required_access_grants: [findatausers]
   }
 
   dimension: latitude {
