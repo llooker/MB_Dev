@@ -15,7 +15,7 @@ datagroup: hourly_refresh {
 
 access_grant: findatausers {
   user_attribute: can_see_pii
-  allowed_values: ["1"]
+  allowed_values: ["Yes"]
 }
 
 # # Select the views that should be a part of this model,
