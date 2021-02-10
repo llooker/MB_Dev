@@ -14,7 +14,7 @@ view: users_ext {
 
   dimension: full_name {
     type: string
-    sql: CONCAT(${TABLE}.first_name}, " ", ${TABLE}.last_name}} ;;
+    sql: CONCAT(${TABLE}.first_name, ' ', ${TABLE}.last_name) ;;
     required_access_grants: [findatausers]
   }
 
