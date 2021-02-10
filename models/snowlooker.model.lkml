@@ -123,6 +123,7 @@ explore: order_items {
   }
 
   join: users {
+    required_access_grants: [findatausers]
     from: users
     type: left_outer
     sql_on: ${order_items.user_id} = ${users.id} ;;
