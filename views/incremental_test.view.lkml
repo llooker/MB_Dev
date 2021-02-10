@@ -15,7 +15,7 @@
 #       timeframes: [raw,date,time]
 #     }
 #     dimension: random_num {}
-#   } add test comment
+#   } add test comment added
 
 view: order_items_incremental {
 
