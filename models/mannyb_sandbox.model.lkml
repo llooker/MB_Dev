@@ -105,12 +105,12 @@ explore: order_items {
     limit: 5
     sort: {field:total_revenue desc: yes      }
   }
-  query: total_users_by_state {
-    dimensions: [users.state]
-    measures: [user_count]
-    limit: 5
-    sort: {field: user_count desc:yes}
-  }
+  # query: total_users_by_state {
+  #   dimensions: [users.state]
+  #   measures: [user_count]
+  #   limit: 5
+  #   sort: {field: user_count desc:yes}
+  # }
 }
 
 explore: products {

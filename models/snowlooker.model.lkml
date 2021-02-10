@@ -53,54 +53,54 @@ test: status_is_not_null {
 }
 
 
-explore: agg_aware {
-  from: order_items
-  view_name: order_items
-  extends: [order_items]
-  label: "Agg Aware Order Items"
-  aggregate_table: sale_price_by_day {
-    query: {
-      dimensions: [order_items.created_date]
-      measures: [order_items.total_revenue, order_items.count]
-      timezone: America/Los_Angeles
-    }
-    materialization: {
-      datagroup_trigger: ecommerce_etl
-    }
-  }
-  aggregate_table: sale_price_by_week {
-    query: {
-      dimensions: [order_items.created_week]
-      measures: [order_items.total_revenue, order_items.count, order_items.average_sales_price]
-      # filters: [order_items.status: "Complete"]
-      timezone: America/Los_Angeles
-    }
-    materialization: {
-      datagroup_trigger: ecommerce_etl
-    }
-  }
-  aggregate_table: sale_price_by_status {
-    query: {
-      dimensions: [order_items.created_date, order_items.status]
-      measures: [order_items.total_revenue, order_items.count]
-      timezone: America/Los_Angeles
-      filters: [order_items.created_date: "last 30 days"]
-    }
-    materialization: {
-      datagroup_trigger: ecommerce_etl
-    }
-  }
-  aggregate_table: sales_price_by_brand {
-    query: {
-    dimensions: [order_items.created_date, products.brand]
-    measures: [order_items.total_revenue, order_items.count, ]
-    filters: [order_items.created_date: "last 30 days"]
-   }
-    materialization: {
-      datagroup_trigger: ecommerce_etl
-    }
-  }
-}
+# explore: agg_aware {
+#   from: order_items
+#   view_name: order_items
+#   extends: [order_items]
+#   label: "Agg Aware Order Items"
+#   aggregate_table: sale_price_by_day {
+#     query: {
+#       dimensions: [order_items.created_date]
+#       measures: [order_items.total_revenue, order_items.count]
+#       timezone: America/Los_Angeles
+#     }
+#     materialization: {
+#       datagroup_trigger: ecommerce_etl
+#     }
+#   }
+#   aggregate_table: sale_price_by_week {
+#     query: {
+#       dimensions: [order_items.created_week]
+#       measures: [order_items.total_revenue, order_items.count, order_items.average_sales_price]
+#       # filters: [order_items.status: "Complete"]
+#       timezone: America/Los_Angeles
+#     }
+#     materialization: {
+#       datagroup_trigger: ecommerce_etl
+#     }
+#   }
+#   aggregate_table: sale_price_by_status {
+#     query: {
+#       dimensions: [order_items.created_date, order_items.status]
+#       measures: [order_items.total_revenue, order_items.count]
+#       timezone: America/Los_Angeles
+#       filters: [order_items.created_date: "last 30 days"]
+#     }
+#     materialization: {
+#       datagroup_trigger: ecommerce_etl
+#     }
+#   }
+#   aggregate_table: sales_price_by_brand {
+#     query: {
+#     dimensions: [order_items.created_date, products.brand]
+#     measures: [order_items.total_revenue, order_items.count, ]
+#     filters: [order_items.created_date: "last 30 days"]
+#   }
+#     materialization: {
+#       datagroup_trigger: ecommerce_etl
+#     }
+#   }
+# }
 
 # case_sensitive: no
 
@@ -115,18 +115,19 @@ explore: events {
 
 explore: order_items {
   label: "SF Orders"
-
+# fields: [ALL_FIELDS*, -user_count]
   join: inventory_items {
     type: left_outer
     sql_on: ${order_items.inventory_item_id} = ${inventory_items.id} ;;
     relationship: many_to_one
   }
 
-  join: users {
-    required_access_grants: [findatausers]
-    from: users
+  join: users_ext {
+
+    # required_access_grants: [findatausers]
+
     type: left_outer
-    sql_on: ${order_items.user_id} = ${users.id} ;;
+    sql_on: ${order_items.user_id} = ${users_ext.id} ;;
     relationship: many_to_one
   }
 
@@ -136,17 +137,17 @@ explore: order_items {
     relationship: many_to_one
   }
   query: top_5_sales_by_state {
-    dimensions: [users.state]
+    dimensions: [users_ext.state]
     measures: [total_revenue]
     limit: 5
     sort: {field:total_revenue desc: yes      }
   }
-  query: total_users_by_state {
-    dimensions: [users.state]
-    measures: [user_count]
-    limit: 5
-    sort: {field: user_count desc:yes}
-  }
+  # query: total_users_by_state {
+  #   dimensions: [users_ext.state]
+  #   measures: [user_count]
+  #   limit: 5
+  #   sort: {field: user_count desc:yes}
+  # }
 
   query: orders_by_date {
     dimensions: [created_date]

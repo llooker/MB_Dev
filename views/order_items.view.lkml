@@ -381,16 +381,16 @@ view: order_items {
       value_format_name: usd
     }
 
-    measure: user_count {
-      type: count_distinct
-      sql: ${users.id} ;;
-    }
+    # measure: user_count {
+    #   type: count_distinct
+    #   sql: ${users.id} ;;
+    # }
 
-    measure: average_revenue_per_user {
-      type: number
-      sql: ${total_revenue}/nullif(${user_count} ;;
+    # measure: average_revenue_per_user {
+    #   type: number
+    #   sql: ${total_revenue}/nullif(${user_count} ;;
 
-    }
+    # }
 
     measure: max_created_date_2 {
       type: date
