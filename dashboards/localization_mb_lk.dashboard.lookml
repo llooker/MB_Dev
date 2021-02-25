@@ -1,7 +1,8 @@
-- dashboard: localization_test_mb_2
-  title: localization_test_mb_2
+- dashboard: localization_mb_lk
+  title: Localization Mb Lk
   layout: newspaper
   preferred_viewer: dashboards-next
+  tile_size: 100
   elements:
   - title: localization_test_mb
     name: localization_test_mb
@@ -26,13 +27,13 @@
     enable_conditional_formatting: false
     header_text_alignment: left
     header_font_size: 12
-    rows_font_size: 20
+    rows_font_size: 12
     conditional_formatting_include_totals: false
     conditional_formatting_include_nulls: false
     defaults_version: 1
     note_state: collapsed
     note_display: hover
-    note_text: mytext.note_text
+    note_text: This is the translation test
     listen: {}
     row: 0
     col: 0

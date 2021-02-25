@@ -36,6 +36,23 @@ access_grant: findatausers {
 
 # aggregate_awareness: yes
 
+
+
+# Place in `snowlooker` model
+explore: +order_items {
+  aggregate_table: rollup__count {
+    query: {
+
+      measures: [count]
+      filters: [order_items.created_date: "30 days"]
+    }
+
+    materialization: {
+    persist_for: "24 hours"
+    }
+  }
+}
+
 explore: order_items_incremental {}
 
 test: status_is_not_null {

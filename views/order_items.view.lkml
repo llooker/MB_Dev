@@ -338,6 +338,23 @@ view: order_items {
       drill_fields:  [created_time, total_revenue]
     }
 
+  measure: count_with_html {
+    type: count_distinct
+    sql: ${id} ;;
+    value_format_name: decimal_2
+    html:
+      Count: {{rendered_value}} |
+       Total Revenue:
+      {% if total_revenue._value < 15000 %}
+        <font color=red>{{total_revenue._rendered_value}} </font>
+      {% else %}
+        <font color=blue size=3>{{ total_revenue._rendered_value}} </font>
+      {% endif %}
+
+    ;;
+    drill_fields:  [created_time, total_revenue]
+  }
+
     measure: count_with_flag {
       type: count_distinct
       sql: ${id} ;;
@@ -379,6 +396,12 @@ view: order_items {
       type:  sum
       sql: ${TABLE}.sale_price ;;
       value_format_name: usd
+    }
+
+    measure: order_details_list {
+      type: string
+      sql: listagg(DISTINCT ${status}, '| ') ;;
+
     }
 
     # measure: user_count {
