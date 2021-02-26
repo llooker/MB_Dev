@@ -3,7 +3,7 @@
   layout: newspaper
   preferred_viewer: dashboards
   elements:
-  - title: localization_test_mb
+  - title: Cancelled
     name: localization_test_mb
     model: mannyb_sandbox
     explore: order_items

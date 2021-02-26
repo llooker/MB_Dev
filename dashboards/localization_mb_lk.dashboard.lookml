@@ -1,10 +1,9 @@
 - dashboard: localization_mb_lk
-  title: Localization Mb Lk
+  title: "lk_dash"
   layout: newspaper
   preferred_viewer: dashboards-next
-  tile_size: 100
   elements:
-  - title: localization_test_mb
+  - title: "lk_tile"
     name: localization_test_mb
     model: mannyb_sandbox
     explore: order_items
@@ -33,9 +32,9 @@
     defaults_version: 1
     note_state: collapsed
     note_display: hover
-    note_text: This is the translation test
+    note_text: "mytext.note_text"
     listen: {}
     row: 0
     col: 0
-    width: 8
+    width: 100
     height: 6

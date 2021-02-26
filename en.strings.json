@@ -4,8 +4,10 @@
 "Order Items": "Order Items (C)",
 "Country": "Country Name",
 "Cancelled": "Cancelled Orders",
- "status.label": "Order Status",
- "status.description": "This is order status description",
+"status.label": "Order Status",
+"status.description": "This is order status description",
+"lk_dash": "This is localized dashboard title",
+"lk_tile": "This is localized tile title",
 "mytext.note_text": "This is the translation test",
 "default_datasiteone_dashboard.document_engagement_by_role.note_text": "A comparison of activity within the dataroom. Understand who is most active by the filtered time period.",
 "default_datasiteone_dashboard.engagement_by_folder.note_text": "View at a glance which top-level folders are generating the most activity."
