@@ -9,7 +9,7 @@ view: user_order_facts {
 
        ;;
       publish_as_db_view: yes
-      distribution_style: all
+
   }
 
   measure: count {

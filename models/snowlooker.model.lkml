@@ -1,5 +1,5 @@
 connection: "snowlooker"
-# include: "/*/*.dashboard"
+include: "/*/*.dashboard"
 include: "/*/*.view.lkml"                       # include all views in this project
 # include: "my_dashboard.dashboard.lookml"   # include a LookML dashboard called my_dashboard
 
@@ -132,6 +132,13 @@ explore: events {
 
 explore: order_items {
   label: "SF Orders"
+  # sql_always_where: {% condition order_items.status_filter %} status {% endcondition %} ;;
+
+  sql_always_where:
+
+  ( ${order_items.status} IN ( SELECT status as status_code from order_items WHERE {% condition order_items.status_filter %} status_name {% endcondition %}
+
+  ;;
 # fields: [ALL_FIELDS*, -user_count]
   join: inventory_items {
     type: left_outer
@@ -139,12 +146,12 @@ explore: order_items {
     relationship: many_to_one
   }
 
-  join: users_ext {
+  join: users {
 
     # required_access_grants: [findatausers]
 
     type: left_outer
-    sql_on: ${order_items.user_id} = ${users_ext.id} ;;
+    sql_on: ${order_items.user_id} = ${users.id} ;;
     relationship: many_to_one
   }
 
@@ -153,18 +160,22 @@ explore: order_items {
     sql_on: ${inventory_items.product_id} = ${products.id} ;;
     relationship: many_to_one
   }
+
   query: top_5_sales_by_state {
-    dimensions: [users_ext.state]
+    dimensions: [users.state]
     measures: [total_revenue]
     limit: 5
-    sort: {field:total_revenue desc: yes      }
+    sorts: [total_revenue: desc]
+
   }
-  # query: total_users_by_state {
-  #   dimensions: [users_ext.state]
-  #   measures: [user_count]
-  #   limit: 5
-  #   sort: {field: user_count desc:yes}
-  # }
+
+  query: order_status_by_date_base{
+    dimensions: [order_items.created_date]
+    measures: [order_items.total_revenue]
+    filters: [order_items.created_date: "last 30 days"]
+    sorts: [order_items.created_date: desc]
+  }
+
 
   query: orders_by_date {
     dimensions: [created_date]
@@ -173,6 +184,11 @@ explore: order_items {
     filters: {field:created_date value:"last 7 days"}
   }
 
+  query: order_status_by_date{
+    dimensions: [order_items.created_date, order_items.status]
+    measures: [order_items.total_revenue, order_items.count]
+    filters: [order_items.created_date: "last 30 days"]
+  }
 }
 
 explore: users {}

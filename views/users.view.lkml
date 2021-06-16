@@ -33,6 +33,18 @@ view: users {
     label: "Country"
     type: string
     sql: ${TABLE}.country ;;
+#     html:
+#     <h1>A Web Page</h1>
+# <p id="demo">A Paragraph</p>
+# <button type="button" onclick="myFunction()">Try it</button>
+
+# <script>
+# function myFunction() {
+#   document.getElementById("demo").innerHTML = "Paragraph changed.";
+# }
+# </script>
+
+# ;;
   }
 
   dimension_group: created {
@@ -47,6 +59,11 @@ view: users {
       year
     ]
     sql: ${TABLE}.created_at ;;
+  }
+
+  dimension: days_since_customer {
+    type: number
+    sql: datediff(day, ${created_date},current_date)  ;;
   }
 
   dimension: email {
@@ -72,6 +89,10 @@ view: users {
   dimension: state {
     type: string
     sql: ${TABLE}.state ;;
+    link: {
+      label: "state lookup"
+      url: "https://www.google.com?q={{_user_attributes['state']}}"
+    }
   }
 
   dimension: traffic_source {
@@ -107,19 +128,19 @@ dimension: name {
       }
   }
 
-  dimension: url_gen {
-    type:  string
-    sql:
-     {% assign company_name = _user_attributes['company'] %}
-     {% if company_name == 'exploredx-team' %}
-      'https://{{company_name._value}}.pdxinc.com/looks/6673'
-     {% elsif company_name  == 'exploredx-preprod') %}
-      'https://{{company_name._value}}.pdxinc.com/looks/18?'
-     {% else %}
-      'https://{{company_name._value}}.pdxinc.com/looks/16915'
-      {% endif %}
-    ;;
-  }
+  # dimension: url_gen {
+  #   type:  string
+  #   sql:
+  #   {% assign company_name = _user_attributes['company'] %}
+  #   {% if company_name == 'exploredx-team' %}
+  #     'https://{{company_name._value}}.pdxinc.com/looks/6673'
+  #   {% elsif company_name  == 'exploredx-preprod') %}
+  #     'https://{{company_name._value}}.pdxinc.com/looks/18?'
+  #   {% else %}
+  #     'https://{{company_name._value}}.pdxinc.com/looks/16915'
+  #     {% endif %}
+  #   ;;
+  # }
 
   dimension: zip_html_test {
     label: "Prescription Transaction ID"

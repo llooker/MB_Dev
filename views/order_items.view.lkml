@@ -8,6 +8,11 @@ view: order_items {
     convert_tz: no # not required. used here to simplify code
   }
 
+  filter: status_filter {
+    suggest_explore: order_items
+    suggest_dimension: order_items.status
+  }
+
   parameter: period_duration_filter {
     # home many previous periods do you want to compare against.
     type: number
@@ -757,4 +762,10 @@ view: order_items {
                   <br/>
                   </details>;;
         }
+
+  measure: average_order_per_user {
+    type: number
+    sql: ${count}/${users.count} ;;
+    value_format_name: percent_2
+  }
       }

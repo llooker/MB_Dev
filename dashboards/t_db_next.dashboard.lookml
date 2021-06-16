@@ -1,9 +1,9 @@
 - dashboard: localization_test_mb_2
-  title: localization_test_mb_2
+  title: "localization_test_mb_2"
   layout: newspaper
   preferred_viewer: dashboards-next
   elements:
-  - title: localization_test_mb
+  - title: "localization_test_mb"
     name: localization_test_mb
     model: mannyb_sandbox
     explore: order_items

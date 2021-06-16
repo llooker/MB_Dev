@@ -1,5 +1,5 @@
 - dashboard: localization_test_mb
-  title: localization_test_mb
+  title: "localization_test_mb"
   layout: newspaper
   preferred_viewer: dashboards
   elements:

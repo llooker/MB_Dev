@@ -1,4 +1,4 @@
-connection: "thelook_events_redshift"
+connection: "snowlooker"
 
 # include all the views
 include: "/*/*.view"
@@ -13,6 +13,59 @@ datagroup: mannyb_sandbox_default_datagroup {
 persist_with: mannyb_sandbox_default_datagroup
 
 case_sensitive: no
+
+# ****
+
+# Place in `mannyb_sandbox` model
+explore: +order_items {
+
+  query: Top_10_Product_Brands{
+    dimensions: [products.brand, order_items.created_date]
+    measures: [count, total_revenue]
+    filters: [order_items.created_date: "7 days"]
+    # timezone: America/New_York
+
+#   aggregate_table: rollup__products_brand__0 {
+#     query: Top_10_Product_Brands{
+#     dimensions: [products.brand, order_items.created_date]
+#     measures: [count, total_revenue]
+#     filters: [order_items.created_date: "7 days"]
+#     timezone: America/New_York
+#   }
+
+#     # query: {
+#     #   dimensions: [products.brand, users.state, order_items.created_date]
+#     #   measures: [ total_revenue]
+#     #   # filters: [order_items.created_date: "7 days", users.state: "New York"]
+#     #   timezone: "America/New_York"
+#     #   sorts: [created_date: asc]
+#     # }
+
+#     materialization: {
+#       datagroup_trigger: mannyb_sandbox_default_datagroup
+#     }
+
+# }
+#   aggregate_table: rollup__created_time__1 {
+#     query: {
+#       dimensions: [order_items.created_time, users.state, products.brand]
+#       measures: [ order_items.total_revenue]
+#       filters: [order_items.created_date: "7 days",
+#                 users.state: "New York"]
+#       timezone: "America/New_York"
+#     }
+
+#     materialization: {
+#       datagroup_trigger: mannyb_sandbox_default_datagroup
+
+  }
+}
+
+
+#******
+
+
+
 
 
 explore: distribution_centers {}
@@ -54,6 +107,8 @@ explore: inventory_items {
 }
 
 explore: order_items {
+
+
   # sql_always_where:
   #     ${created_date} BETWEEN ${first_period_start_date} AND ${date_end_date_date}
   #     AND EXTRACT('month' from created_at)
