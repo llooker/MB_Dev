@@ -10,4 +10,5 @@ view: company_list {
     type: count
     drill_fields: []
   }
+  # adding comment
 }
