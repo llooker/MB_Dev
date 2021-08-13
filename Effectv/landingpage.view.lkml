@@ -19,7 +19,7 @@ view: landingpage {
         <div class="btn-group btn-group-lg" align="center">
           <button type="button" class="btn btn-link"><a href="https://www.effectv.com/" target="_blank">Tools A-Z</a></button>
           <button type="button" class="btn btn-link"><a href="https://corporate.comcast.com/company" target="_blank">Category Tools</a></button>
-          <button type="button" class="btn btn-link"><a href="https://effectv.looker.com/login" target="_blank">Sales Discovery</a></button>
+          <button type="button" class="btn btn-link"><a href="/projects/training_advanced/files/alternate_available_connections.md" target="_blank">Sales Discovery</a></button>
         </div>
       </td>
       </tr>

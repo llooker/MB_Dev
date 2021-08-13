@@ -406,8 +406,12 @@ view: order_items {
     measure: order_details_list {
       type: string
       sql: listagg(DISTINCT ${status}, '| ') ;;
-
     }
+
+    # measure: order_status_list {
+    #   type: list
+    #   sql: ${status} ;;
+    # }
 
     # measure: user_count {
     #   type: count_distinct
