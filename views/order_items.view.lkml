@@ -1,5 +1,6 @@
 view: order_items {
   sql_table_name: public.order_items ;;
+  view_label: "Test Order Items"
 
   filter: date_range_filter {
     # define the date range for initial filter. The date range specified here will be used to compare
