@@ -18,27 +18,7 @@ access_grant: findatausers {
   allowed_values: ["Yes"]
 }
 
-
-
-# # Select the views that should be a part of this model,
-# # and define the joins that connect them together.
-#
-# explore: order_items {
-#   join: orders {
-#     relationship: many_to_one
-#     sql_on: ${orders.id} = ${order_items.order_id} ;;
-#   }
-#
-#   join: users {
-#     relationship: many_to_one
-#     sql_on: ${users.id} = ${orders.user_id} ;;
-#   }
-# }
-## test comment
-
-# aggregate_awareness: yes
-
-
+# explore: dynamic_table {}
 
 # Place in `snowlooker` model
 explore: +order_items {
@@ -53,6 +33,7 @@ explore: +order_items {
     persist_for: "24 hours"
     }
   }
+
 }
 
 explore: order_items_incremental {}
@@ -135,12 +116,9 @@ explore: events {
 explore: order_items {
   label: "SF Orders"
   # sql_always_where: {% condition order_items.status_filter %} status {% endcondition %} ;;
-
-  sql_always_where:
-
-  ( ${order_items.status} IN ( SELECT status as status_code from order_items WHERE {% condition order_items.status_filter %} status_name {% endcondition %}
-
-  ;;
+  # sql_always_where:
+  # ( ${order_items.status} IN ( SELECT status as status_code from order_items WHERE {% condition order_items.status_filter %} status_name {% endcondition %}
+  # ;;
 # fields: [ALL_FIELDS*, -user_count]
   join: inventory_items {
     type: left_outer
@@ -149,9 +127,7 @@ explore: order_items {
   }
 
   join: users {
-
     # required_access_grants: [findatausers]
-
     type: left_outer
     sql_on: ${order_items.user_id} = ${users.id} ;;
     relationship: many_to_one
@@ -163,6 +139,17 @@ explore: order_items {
     relationship: many_to_one
   }
 
+  join: dynamic_table {
+    type: left_outer
+    sql_on: {% if dynamic_table.filter_dimension._parameter_value == 'brand' %}
+             ${products.brand} = ${dynamic_table.column_name}
+          {% elsif dynamic_table.filter_dimension._parameter_value == 'category'  %}
+             ${products.category} = ${dynamic_table.column_name}
+          {% else %}
+          1=1
+          {% endif %}
+      ;;
+  }
   query: top_5_sales_by_state {
     dimensions: [users.state]
     measures: [total_revenue]
@@ -193,4 +180,6 @@ explore: order_items {
   }
 }
 
-explore: users {}
+explore: users {
+  sql_always_where: ${id} = '{{ _user_attributes["name"] }}' ;;
+}

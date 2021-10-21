@@ -13,6 +13,16 @@ view: order_items {
     suggest_dimension: order_items.status
   }
 
+  parameter: filter_dimension {
+    type: string
+    allowed_value: {label: "Brand" value:"brand"}
+    allowed_value: {label: "Category" value:"category"}
+  }
+
+  filter: filter_dimension_values {
+    type: string
+  }
+
   parameter: period_duration_filter {
     # home many previous periods do you want to compare against.
     type: number
@@ -401,6 +411,7 @@ view: order_items {
       type:  sum
       sql: ${TABLE}.sale_price ;;
       value_format_name: usd
+      drill_fields: [id, created_date, products.name]
     }
 
     measure: order_details_list {
