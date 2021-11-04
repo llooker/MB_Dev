@@ -108,7 +108,7 @@ explore: inventory_items {
 
 explore: order_items {
 
-
+sql_always_where: ${products.brand} = '{{_user_attributes["brand"] }}';;
   # sql_always_where:
   #     ${created_date} BETWEEN ${first_period_start_date} AND ${date_end_date_date}
   #     AND EXTRACT('month' from created_at)

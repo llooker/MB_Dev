@@ -101,6 +101,16 @@ view: users {
     }
   }
 
+  dimension: longitude {  }
+
+  dimension: latitude {}
+
+  dimension: user_location {
+    type: location
+    sql_latitude: ${latitude} ;;
+    sql_longitude: ${longitude} ;;
+  }
+
   dimension: traffic_source {
     type: string
     sql: ${TABLE}.traffic_source ;;

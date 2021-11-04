@@ -181,5 +181,5 @@ explore: order_items {
 }
 
 explore: users {
-  sql_always_where: ${id} = '{{ _user_attributes["name"] }}' ;;
+  # sql_always_where: ${id} = '{{ _user_attributes["name"] }}' ;;
 }
