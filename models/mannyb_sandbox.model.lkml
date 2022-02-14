@@ -14,10 +14,30 @@ persist_with: mannyb_sandbox_default_datagroup
 
 case_sensitive: no
 
+access_grant: departments_access {
+  user_attribute: department
+  allowed_values: ["HR", "Finance"]
+}
+
+access_grant: internal_only {
+  user_attribute: customer
+  allowed_values: ["I"]
+}
+
+
+explore: users_pii {
+  from:  users
+  required_access_grants: [departments_access, internal_only]
+}
 # ****
 
 # Place in `mannyb_sandbox` model
 explore: +order_items {
+
+  access_filter: {
+    field: products.brand
+    user_attribute: brand
+  }
 
   query: Top_10_Product_Brands{
     dimensions: [products.brand, order_items.created_date]

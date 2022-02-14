@@ -119,6 +119,12 @@ explore: order_items {
   # sql_always_where:
   # ( ${order_items.status} IN ( SELECT status as status_code from order_items WHERE {% condition order_items.status_filter %} status_name {% endcondition %}
   # ;;
+
+  access_filter: {
+    field: products.brand
+    user_attribute: brand
+  }
+
 # fields: [ALL_FIELDS*, -user_count]
   join: inventory_items {
     type: left_outer

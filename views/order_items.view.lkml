@@ -141,7 +141,9 @@ view: order_items {
       quarter,
       year,
       hour,
-      millisecond
+      millisecond,
+      second,
+      minute
     ]
     sql: ${TABLE}.created_at ;;
     convert_tz: no
