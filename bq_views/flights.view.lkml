@@ -36,6 +36,16 @@ view: flights {
     sql: ${distance} ;;
   }
 
+  measure: max_flight_date {
+    type: max
+    sql: ${depart_time};;
+  }
+
+  measure: min_flight_date {
+    type: min
+    sql: ${depart_date};;
+  }
+
   dimension: distance_tiered {
     type: tier
     sql: ${distance} ;;

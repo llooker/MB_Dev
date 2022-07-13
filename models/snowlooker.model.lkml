@@ -120,10 +120,33 @@ explore: order_items {
   # ( ${order_items.status} IN ( SELECT status as status_code from order_items WHERE {% condition order_items.status_filter %} status_name {% endcondition %}
   # ;;
 
-  access_filter: {
-    field: products.brand
-    user_attribute: brand
-  }
+  # sql_always_where: ${products.brand} IN
+  #         ( SELECT brand
+  #           FROM public.products
+  #           WHERE
+  #             {% condition products.value %} {% parameter products.selector %} {% endcondition %}
+  #             )
+  #         ;;
+
+  # sql_always_where:
+  #   {% if products.selector._parameter_value == 'category' %}
+  #   {% condition products.value %} ${products.category} {% endcondition %}
+  #   {% elsif products.selector._parameter_value == 'department' %}
+  #   {% condition products.value %} ${products.department} {% endcondition %}
+  #   {% else %}
+  #   {% condition products.value %} ${products.brand} {% endcondition %}
+
+  #   ;;
+
+# sql_always_where:
+#   {% if _users_attributes['customer_id'] | slice(1, 2) == 'CUS' %}
+# ;;
+  # access_filter: {
+  #   field: products.brand
+  #   user_attribute: brand
+  # }
+
+
 
 # fields: [ALL_FIELDS*, -user_count]
   join: inventory_items {

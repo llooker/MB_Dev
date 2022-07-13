@@ -2,6 +2,24 @@
 view: products {
   sql_table_name: public.products ;;
 
+  parameter: selector {
+    type: unquoted
+    allowed_value: {
+      value: "department"
+    }
+    allowed_value: {
+      value: "category"
+    }
+    allowed_value: {
+      value: "brand"
+    }
+    default_value: "brand"
+  }
+
+filter: value {
+  type: string
+}
+
   dimension: id {
     primary_key: yes
     type: number
